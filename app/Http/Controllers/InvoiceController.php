@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
@@ -12,7 +15,10 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        //
+        $invoices = Invoice::all();
+        return Inertia::render('Invoice/index', [
+            'invoices' => $invoices
+        ]);
     }
 
     /**
@@ -20,7 +26,9 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Invoice/create', [
+            'clients' => Client::all()
+        ]);
     }
 
     /**
@@ -28,7 +36,16 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'total' => ['required'],
+            'client_id' => ['required'],
+            'status' => ['required'],
+        ]);
+
+        $data = array_merge($validatedData, ['user_id' => Auth::id()]);
+        Invoice::create($data);
+
+        return to_route('invoice.index');
     }
 
     /**
@@ -44,7 +61,10 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        //
+        return Inertia::render('Invoice/create', [
+            'invoice' => $invoice,
+            'clients' => Client::all()
+        ]);
     }
 
     /**
@@ -52,7 +72,13 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        $invoice->update($request->validate([
+            'total' => ['required'],
+            'client_id' => ['required'],
+            'status' => ['required'],
+        ]));
+
+        return to_route('invoice.index');
     }
 
     /**
@@ -60,6 +86,8 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        //
+        $invoice->delete();
+
+        return to_route('invoice.index');
     }
 }

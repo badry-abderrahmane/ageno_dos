@@ -44,4 +44,12 @@ export interface Client {
     updated_at: string;
 }
 
+export interface Invoice {
+    id: number;
+    total: string;
+    status: 'not_paid' | 'paid';
+    client_id: string;
+    user_id: string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

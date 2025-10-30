@@ -64,7 +64,7 @@ const breadcrumbs: BreadcrumbItem[] = [
               </div>
 
               <div class="grid gap-2">
-                <Label for="name">ICE</Label>
+                <Label for="ice">ICE</Label>
                 <Input id="ice" type="number" required autofocus :tabindex="1" autocomplete="ice" name="ice"
                   placeholder="ICE" :model-value="client?.ice" />
                 <InputError :message="errors.ice" />
