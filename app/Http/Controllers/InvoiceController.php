@@ -15,7 +15,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::where('status', 'not_paid')->get();
+        $invoices = Invoice::with('client')->where('status', 'not_paid')->get();
         return Inertia::render('Invoice/index', [
             'invoices' => $invoices
         ]);
@@ -26,7 +26,7 @@ class InvoiceController extends Controller
      */
     public function bills()
     {
-        $invoices = Invoice::where('status', 'paid')->get();
+        $invoices = Invoice::with('client')->where('status', 'paid')->get();
         return Inertia::render('Invoice/bills', [
             'invoices' => $invoices
         ]);

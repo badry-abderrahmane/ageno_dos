@@ -59,7 +59,7 @@ const breadcrumbs: BreadcrumbItem[] = [
           <TableBody>
             <TableRow v-for="invoice in invoices" :key="invoice.id">
               <TableCell class="font-medium">
-                {{ invoice.client_id }}
+                {{ invoice.client.name }}
               </TableCell>
               <TableCell>{{ invoice.total }}</TableCell>
               <TableCell>{{ invoice.status }}</TableCell>
@@ -67,7 +67,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <Button class="mr-1" @click="router.visit(edit(invoice.id).url)">
                   <Pencil />
                 </Button>
-                <DeleteConfirm :binded="destroy(invoice.id)" resource="invoice" :icon="Trash">
+                <DeleteConfirm :binded="destroy.form(invoice.id)" resource="invoice" :icon="Trash">
                 </DeleteConfirm>
               </TableCell>
             </TableRow>

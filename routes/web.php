@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -22,6 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/invoice/bill', [InvoiceController::class, 'bills'])->name('invoice.bill');
     Route::resource('invoice', InvoiceController::class);
     Route::resource('product', ProductController::class);
+    Route::resource('supplier', SupplierController::class);
 });
 
 

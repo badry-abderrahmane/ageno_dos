@@ -49,10 +49,20 @@ export interface Invoice {
     total: string;
     status: 'not_paid' | 'paid';
     client_id: string;
+    client: Client;
     user_id: string;
 }
 
-interface Supplier { id: number, name: string }
+interface Supplier {
+  id: number;
+  name: string;
+  phone?: string;
+  address?: string;
+  email?: string;
+  contact?: string;
+  category?: string;
+}
+
 interface ProductCategory { id: number, name: string }
 interface Product {
   id: number;

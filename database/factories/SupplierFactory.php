@@ -19,7 +19,7 @@ class SupplierFactory extends Factory
         return [
             'name' => $this->faker->unique()->company() . rand(10, 9900),
             'phone' => $this->faker->phoneNumber(),
-            'adress' => $this->faker->address(),
+            'address' => $this->faker->address(),
             'email' => $this->faker->unique()->companyEmail(),
             'contact' => $this->faker->name(),
             'category' => $this->faker->randomElement(['Electronics', 'Chemicals', 'Raw Materials', 'Logistics']),
