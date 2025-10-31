@@ -52,4 +52,18 @@ export interface Invoice {
     user_id: string;
 }
 
+interface Supplier { id: number, name: string }
+interface ProductCategory { id: number, name: string }
+interface Product {
+  id: number;
+  name: string;
+  ref: string;
+  price: string;
+  supplier_price: string;
+  product_category_id: number;
+  supplier_id: number;
+  supplier: Supplier;
+  product_category: ProductCategory;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

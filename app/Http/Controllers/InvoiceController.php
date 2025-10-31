@@ -15,8 +15,19 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::all();
+        $invoices = Invoice::where('status', 'not_paid')->get();
         return Inertia::render('Invoice/index', [
+            'invoices' => $invoices
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function bills()
+    {
+        $invoices = Invoice::where('status', 'paid')->get();
+        return Inertia::render('Invoice/bills', [
             'invoices' => $invoices
         ]);
     }

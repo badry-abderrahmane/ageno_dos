@@ -14,6 +14,7 @@ import {
 import { dashboard } from '@/routes';
 import invoice from '@/routes/invoice/index'
 import client from '@/routes/client/index'
+import product from '@/routes/product/index'
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
@@ -35,6 +36,16 @@ const mainNavItems: NavItem[] = [
         href: invoice.index(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Bills',
+        href: invoice.bill(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Products',
+        href: product.index(),
+        icon: LayoutGrid
+    }
 ];
 
 const footerNavItems: NavItem[] = [
