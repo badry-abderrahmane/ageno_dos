@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->string('org_name');
-            $table->string('org_footer')->nullable();
-            $table->string('org_modality')->nullable();
-            $table->string('org_bank')->nullable();
-            $table->string('org_logo')->nullable();
-            $table->string('org_color')->nullable();
+            $table->string('org_footer')->nullable()->default('');
+            $table->string('org_modality')->nullable()->default('');
+            $table->string('org_bank')->nullable()->default('');
+            $table->string('org_logo')->nullable()->default('');
+            $table->string('org_color')->nullable()->default('');
             $table->timestamps();
         });
     }

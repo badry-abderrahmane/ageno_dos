@@ -25,9 +25,8 @@ class ProductController extends Controller
             // Apply search filter if present
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
-                    // Search by product name or reference
-                    $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('ref', 'like', '%' . $search . '%');
+                    // Search by product name 
+                    $query->where('name', 'like', '%' . $search . '%');
                 })
                     // Search in related Product Category name
                     ->orWhereHas('productCategory', function ($query) use ($search) {
@@ -64,7 +63,6 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'ref' => ['required', 'string', 'max:50', 'unique:products,ref'],
             'price' => ['required', 'numeric', 'min:0'],
             'supplier_price' => ['nullable', 'numeric', 'min:0'],
             'delivery_time' => ['nullable', 'integer', 'min:0'],
@@ -99,7 +97,6 @@ class ProductController extends Controller
     {
         $product->update($request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'ref' => ['required', 'string', 'max:50', 'unique:products,ref,' . $product->id],
             'price' => ['required', 'numeric', 'min:0'],
             'supplier_price' => ['nullable', 'numeric', 'min:0'],
             'delivery_time' => ['nullable', 'integer', 'min:0'],

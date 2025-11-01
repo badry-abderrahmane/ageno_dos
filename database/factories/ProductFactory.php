@@ -23,7 +23,6 @@ class ProductFactory extends Factory
 
         return [
             'name' => $this->faker->unique()->words(2, true) . ' Widget',
-            'ref' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{4}'),
             'delivery_time' => $this->faker->numberBetween(1, 14),
             'supplier_price' => $this->faker->randomFloat(2, 1, $price * 0.9), // Less than final price
             'price' => $price,

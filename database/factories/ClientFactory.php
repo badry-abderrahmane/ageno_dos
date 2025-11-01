@@ -24,7 +24,7 @@ class ClientFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'fax' => $this->faker->phoneNumber(),
             'email' => $this->faker->unique()->companyEmail(),
-            'adress' => $this->faker->address(),
+            'address' => $this->faker->address(),
             'sector' => $this->faker->randomElement(['Tech', 'Finance', 'Retail', 'Healthcare']),
             // IMPORTANT: Fetch an existing User's ID
             'user_id' => User::factory(), // This uses the Factory Relationship syntax

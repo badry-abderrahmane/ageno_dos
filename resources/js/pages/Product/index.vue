@@ -109,7 +109,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
               <CardTitle class="text-lg">{{ product.name }}</CardTitle>
               <CardDescription class="flex items-center text-sm">
                 <Tag class="h-4 w-4 mr-1 text-gray-500" />
-                REF: <span class="ml-1 font-medium text-foreground">{{ product.ref }}</span>
+
               </CardDescription>
             </CardHeader>
 

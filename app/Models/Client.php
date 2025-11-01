@@ -22,7 +22,7 @@ class Client extends Model
         'phone',
         'fax',
         'email',
-        'adress',
+        'address',
         'sector',
         'user_id',
     ];

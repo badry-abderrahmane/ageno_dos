@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('ref')->unique();
             $table->string('delivery_time')->nullable()->default('0');
             $table->string('supplier_price')->nullable()->default('0');
             $table->string('price')->nullable()->default('0');

@@ -58,7 +58,6 @@ const isEdit = !!props.product;
 // Simulating the useForm structure:
 const form = useForm({
   name: props.product?.name ?? '',
-  ref: props.product?.ref ?? '',
   delivery_time: props.product?.delivery_time ?? '0',
   supplier_price: props.product?.supplier_price ?? '0.00',
   price: props.product?.price ?? '0.00',
@@ -134,14 +133,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                   placeholder="Ultra-Max Sensor V2" v-model="form.name" :disabled="form.processing"
                   :class="{ 'border-red-500': form.errors.name }" />
                 <InputError :message="form.errors.name" />
-              </div>
-
-              <div class="grid gap-2">
-                <Label for="ref">Reference (REF) <span class="text-red-500">*</span></Label>
-                <Input id="ref" type="text" required :tabindex="2" autocomplete="off" name="ref"
-                  placeholder="Unique SKU or Reference Code" v-model="form.ref" :disabled="form.processing"
-                  :class="{ 'border-red-500': form.errors.ref }" />
-                <InputError :message="form.errors.ref" />
               </div>
             </div>
 
