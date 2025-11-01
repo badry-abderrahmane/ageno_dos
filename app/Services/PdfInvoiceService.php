@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Invoice;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PdfInvoiceService
 {
@@ -43,6 +44,7 @@ class PdfInvoiceService
         $html = view('pdf.invoice', [
             'invoice' => $invoice,
             'date' => Carbon::now()->format('d/m/Y'),
+            'organization' => Auth::user()->organization
         ])->render();
 
         $pdf->writeHTML($html, true, false, true, false, '');

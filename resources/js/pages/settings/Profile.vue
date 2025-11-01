@@ -136,6 +136,13 @@ const organization = user.organization || {}
                         </div> -->
                     </div>
 
+                    <div class="grid gap-2">
+                        <Label for="org_color">Organization Color</Label>
+                        <Input id="org_color" name="org_color" :default-value="organization.org_color"
+                            placeholder="#ffff" rows="4" />
+                        <InputError class="mt-2" :message="errors.org_color" />
+                    </div>
+
                     <div class="flex items-center gap-4">
                         <Button type="submit" :disabled="processing" data-test="update-org-button">
                             Save Organization

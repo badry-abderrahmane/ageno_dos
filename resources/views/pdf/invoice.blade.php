@@ -1,10 +1,48 @@
 @php
+    function hexToBlendedHex(string $hex, float $opacity): string
+    {
+        // Clean and expand foreground hex
+        $hex = ltrim($hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        // Fallback to white if invalid
+        if (strlen($hex) !== 6) {
+            return '#FFFFFF';
+        }
+
+        $alpha = max(0.0, min(1.0, $opacity));
+        $inverseAlpha = 1.0 - $alpha;
+        $blendedHex = '#';
+
+        // Background color components (White: 255, 255, 255)
+        $bgVal = 255;
+
+        // Blend each R, G, B component
+        for ($i = 0; $i < 3; $i++) {
+            $start = $i * 2;
+
+            // Get foreground component value
+            $fgVal = hexdec(substr($hex, $start, 2));
+
+            // Blending formula: (Fg * Alpha) + (Bg * (1 - Alpha))
+            $blendedVal = round($fgVal * $alpha + $bgVal * $inverseAlpha);
+
+            // Ensure value is between 0 and 255
+            $blendedVal = max(0, min(255, $blendedVal));
+
+            // Convert back to a 2-digit hex string and append
+            $blendedHex .= str_pad(dechex($blendedVal), 2, '0', STR_PAD_LEFT);
+        }
+
+        return strtoupper($blendedHex);
+    }
     // ========================
     // COMPANY CONFIG VARIABLES
     // ========================
-    use Illuminate\Support\Facades\Auth;
-    $user = Auth::user();
-    $organization = $user->organization;
+    $baseColor = $organization->org_color ?? '#9E9E9E';
+    $tintColor = hexToBlendedHex($baseColor, '0.2');
 @endphp
 
 <!DOCTYPE html>
@@ -68,13 +106,14 @@
     <!-- COMPANY & CLIENT INFO -->
     <table cellspacing="0" cellpadding="5" border="1">
         <tr>
-            <td style="background-color:#bfffed;">
+            <td style="
+                background-color: {{ $tintColor }};">
                 Entreprise:<br /><br /><strong> {{ $organization->org_name }}</strong><br />
             </td>
-            <td style="background-color:#bfffed;">
+            <td style="background-color: {{ $tintColor }};">
                 Client:<br /><br /><strong>{{ $invoice->client->name ?? '' }}</strong><br />
             </td>
-            <td style="background-color:#bfffed;">
+            <td style="background-color: {{ $tintColor }};">
                 ICE:<br /><br /><strong>
                     {{ $invoice->client->ice ?? '' }}</strong><br />
             </td>
@@ -86,7 +125,7 @@
     <!-- PRODUCTS TABLE -->
     <table border="1" cellpadding="2" cellspacing="0">
         <thead>
-            <tr style="background-color:#00bf63;color:#fff;">
+            <tr style="background-color: {{ $baseColor }};color:#fff;">
                 <td width="20" align="center"><b></b></td>
                 <td width="220" align="center"><b>Produit</b></td>
                 <td width="72" align="center"><b>Quantité</b></td>
@@ -137,7 +176,8 @@
             <td width="242" style="border: 1px solid black;" rowspan="3"><b>Coordonnées
                     bancaires:</b><br><br><i><u>Banque:</u>&nbsp;&nbsp;&nbsp;{{ $organization->org_bank }}</i></td>
             <td width="20" align="center"><b></b></td>
-            <td width="140" align="center" style="border: 1px solid black;background-color:#00bf63;color: white;">
+            <td width="140" align="center"
+                style="border: 1px solid black;background-color: {{ $baseColor }};color: white;">
                 <b>Montant total HT (MAD)</b>
             </td>
             <td width="130" align="center" style="border: 1px solid black;">
@@ -146,7 +186,8 @@
         </tr>
         <tr>
             <td width="20" align="center"><b></b></td>
-            <td width="140" align="center" style="border: 1px solid black;background-color:#00bf63;color: white;">
+            <td width="140" align="center"
+                style="border: 1px solid black;background-color: {{ $baseColor }};color: white;">
                 <b>TVA</b>
             </td>
             <td width="130" align="center" style="border: 1px solid black;">
@@ -155,7 +196,8 @@
         </tr>
         <tr>
             <td width="20" align="center"><b></b></td>
-            <td width="140" align="center" style="border: 1px solid black;background-color:#00bf63;color: white;">
+            <td width="140" align="center"
+                style="border: 1px solid black;background-color: {{ $baseColor }};color: white;">
                 <b>Montant total TTC (MAD)</b>
             </td>
             <td width="130" align="center" style="border: 1px solid black;">
