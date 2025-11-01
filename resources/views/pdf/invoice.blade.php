@@ -3,15 +3,6 @@
     // COMPANY CONFIG VARIABLES
     // ========================
     $companyName = 'Vieva Services';
-    $companyIce = '003176911000018';
-    $companyPhone = '+212 (0) 520354177';
-    $companyFax = '+212 (0) 622878187';
-    $companyEmail = 'contact@hsprint.ma';
-    $companyAddress = 'LOT MASSIRA RESIDENCE COSTA DEL SOL ETG 4 APP 21 - Mohammedia, Maroc';
-    $companyRc = '32107';
-    $companyTp = '39580811';
-    $companyIf = '53244421';
-    $companyBank = 'BMCE BANK Maroc';
     $companyLogo = public_path('images/logoSociete.png');
 @endphp
 
@@ -189,12 +180,6 @@
 
     </table>
     <br>
-    <!-- FOOTER -->
-    <div class="footer">
-        {{ $companyAddress }} - Tel: {{ $companyPhone }} - Fax: {{ $companyFax }}
-        Email: {{ $companyEmail }} - ICE {{ $companyIce }} - RC {{ $companyRc }} - TP {{ $companyTp }} - IF
-        {{ $companyIf }}</div>
-
 </body>
 
 </html>
