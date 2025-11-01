@@ -2,8 +2,9 @@
     // ========================
     // COMPANY CONFIG VARIABLES
     // ========================
-    $companyName = 'Vieva Services';
-    $companyLogo = public_path('images/logoSociete.png');
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user();
+    $organization = $user->organization;
 @endphp
 
 <!DOCTYPE html>
@@ -39,16 +40,16 @@
 </head>
 
 <body>
-
+    <br>
     <!-- HEADER -->
     <table cellspacing="0" cellpadding="1">
         <tr>
             <td>
-                <img height="45" width="140" src="{{ $companyLogo }}" alt="">
+                <img height="45" width="140" src="{{ $organization->org_logo }}" alt="">
                 <br />
             </td>
-            <td style="font-size: 18px; width: 220px; "><br>Facture N° {{ $invoice->id }} -
-                {{ \Carbon\Carbon::parse($invoice->created_at)->format('Y') }}
+            <td style="font-size: 17px; width: 220px;"><br>Facture N°
+                {{ $invoice->id }}-{{ \Carbon\Carbon::parse($invoice->created_at)->format('Y') }}
             </td>
             <td>
                 <strong>Facture #ID:</strong>
@@ -68,7 +69,7 @@
     <table cellspacing="0" cellpadding="5" border="1">
         <tr>
             <td style="background-color:#bfffed;">
-                Entreprise:<br /><br /><strong> {{ $companyName }}</strong><br />
+                Entreprise:<br /><br /><strong> {{ $organization->org_name }}</strong><br />
             </td>
             <td style="background-color:#bfffed;">
                 Client:<br /><br /><strong>{{ $invoice->client->name ?? '' }}</strong><br />
@@ -119,7 +120,7 @@
 
     <table cellspacing="0" cellpadding="5" border="1">
         <tr>
-            <td width="532"><b>Modalités de paiement:</b><br></td>
+            <td width="532"><b>Modalités de paiement:</b><br>{{ $organization->org_modality }}</td>
         </tr>
     </table>
 
@@ -134,7 +135,7 @@
         @endphp
         <tr>
             <td width="242" style="border: 1px solid black;" rowspan="3"><b>Coordonnées
-                    bancaires:</b><br><br><i><u>Banque:</u>&nbsp;&nbsp;&nbsp;BMCE BANK Maroc.</i></td>
+                    bancaires:</b><br><br><i><u>Banque:</u>&nbsp;&nbsp;&nbsp;{{ $organization->org_bank }}</i></td>
             <td width="20" align="center"><b></b></td>
             <td width="140" align="center" style="border: 1px solid black;background-color:#00bf63;color: white;">
                 <b>Montant total HT (MAD)</b>

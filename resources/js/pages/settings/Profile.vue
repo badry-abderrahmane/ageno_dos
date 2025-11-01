@@ -127,12 +127,13 @@ const organization = user.organization || {}
 
                     <div class="grid gap-2">
                         <Label for="org_logo">Organization Logo</Label>
-                        <Input id="org_logo" type="file" name="org_logo" accept="image/*" />
+                        <Textarea id="org_logo" name="org_logo" :default-value="organization.org_logo"
+                            placeholder="Logo BASE 64" rows="4" />
                         <InputError class="mt-2" :message="errors.org_logo" />
-                        <div v-if="organization.org_logo" class="mt-2">
+                        <!-- <div v-if="organization.org_logo" class="mt-2">
                             <img :src="`/storage/${organization.org_logo}`" alt="Organization logo"
                                 class="h-12 rounded-md border" />
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="flex items-center gap-4">

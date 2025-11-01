@@ -59,19 +59,19 @@ class OrganizationController extends Controller
             'org_modality' => 'nullable|string|max:255',
             'org_bank'     => 'nullable|string|max:255',
             'org_color'    => 'nullable|string|max:20',
-            'org_logo'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'org_logo'     => 'nullable|string',
         ]);
 
         // Handle logo upload if present
-        if ($request->hasFile('org_logo')) {
-            // Delete old logo if exists
-            if ($organization->org_logo && Storage::disk('public')->exists($organization->org_logo)) {
-                Storage::disk('public')->delete($organization->org_logo);
-            }
+        // if ($request->hasFile('org_logo')) {
+        //     // Delete old logo if exists
+        //     if ($organization->org_logo && Storage::disk('public')->exists($organization->org_logo)) {
+        //         Storage::disk('public')->delete($organization->org_logo);
+        //     }
 
-            $path = $request->file('org_logo')->store('org_logos', 'public');
-            $validated['org_logo'] = $path;
-        }
+        //     $path = $request->file('org_logo')->store('org_logos', 'public');
+        //     $validated['org_logo'] = $path;
+        // }
 
         $organization->update($validated);
 
