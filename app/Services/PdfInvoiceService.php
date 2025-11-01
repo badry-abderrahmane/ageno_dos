@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\Invoice;
-use Elibyy\TCPDF\Facades\TCPDF as PDF;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class PdfInvoiceService

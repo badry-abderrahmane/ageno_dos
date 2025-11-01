@@ -26,11 +26,22 @@ export type AppPageProps<
     sidebarOpen: boolean;
 };
 
+export interface Organization {
+    org_name: string;
+    org_footer?: string;
+    org_modality?: string;
+    org_bank?: string;
+    org_logo?: string;
+    org_color?: string;
+}
+
 export interface User {
     id: number;
     name: string;
     email: string;
     avatar?: string;
+    role: string;
+    organization: Organization
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
