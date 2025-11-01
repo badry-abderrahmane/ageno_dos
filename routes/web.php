@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -21,9 +22,12 @@ Route::get('dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('client', ClientController::class);
     Route::get('/invoice/bill', [InvoiceController::class, 'bills'])->name('invoice.bill');
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])
+        ->name('invoice.download');
     Route::resource('invoice', InvoiceController::class);
     Route::resource('product', ProductController::class);
     Route::resource('supplier', SupplierController::class);
+    Route::resource('productCategory', ProductCategoryController::class);
 });
 
 

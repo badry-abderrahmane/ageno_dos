@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Services\PdfInvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -167,5 +168,20 @@ class InvoiceController extends Controller
         $invoice->delete();
 
         return to_route('invoice.index');
+    }
+
+    /**
+     * Download the specified invoice as a PDF.
+     */
+    public function downloadPdf(Invoice $invoice, PdfInvoiceService $pdfService)
+    {
+        $pdfContent = $pdfService->download($invoice);
+
+        // Naming the file based on the design
+        $filename = "Facture-{$invoice->id}-" . date('Y') . ".pdf";
+
+        return response($pdfContent, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', "attachment; filename=\"{$filename}\"");
     }
 }

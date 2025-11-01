@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index, create, edit, destroy } from '@/routes/invoice';
+import { index, create, edit, destroy, download } from '@/routes/invoice';
 import { Invoice, type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
@@ -67,6 +67,9 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <Button class="mr-1" @click="router.visit(edit(invoice.id).url)">
                   <Pencil />
                 </Button>
+                <a :href="download({ invoice: invoice.id }).url">
+                  <Button variant="outline">Download PDF</Button>
+                </a>
                 <DeleteConfirm :binded="destroy.form(invoice.id)" resource="invoice" :icon="Trash">
                 </DeleteConfirm>
               </TableCell>
