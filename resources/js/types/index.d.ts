@@ -88,3 +88,14 @@ interface Product {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface InertiaLink {
+    /** The URL for the link (or null for the '...' separator or disabled links). */
+    url: string | null;
+
+    /** The display text for the link (e.g., '1', '2', '...', 'Next &raquo;'). */
+    label: string;
+
+    /** A boolean indicating if this link represents the currently active page. */
+    active: boolean;
+}

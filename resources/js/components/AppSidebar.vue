@@ -19,7 +19,7 @@ import supplier from '@/routes/supplier/index'
 import productCategory from '@/routes/productCategory/index'
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { Package, Briefcase, LayoutGrid, FileText, Receipt, Store, Boxes } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -31,46 +31,46 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Clients',
         href: client.index(),
-        icon: LayoutGrid,
+        icon: Briefcase,
     },
     {
         title: 'Invoices',
         href: invoice.index(),
-        icon: LayoutGrid,
+        icon: FileText,
     },
     {
         title: 'Bills',
         href: invoice.bill(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Products',
-        href: product.index(),
-        icon: LayoutGrid
+        icon: Receipt,
     },
     {
         title: 'Suppliers',
         href: supplier.index(),
-        icon: LayoutGrid
+        icon: Store
+    },
+    {
+        title: 'Products',
+        href: product.index(),
+        icon: Package
     },
     {
         title: 'Product categories',
         href: productCategory.index(),
-        icon: LayoutGrid
+        icon: Boxes
     }
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
+    // {
+    //     title: 'Github Repo',
+    //     href: 'https://github.com/laravel/vue-starter-kit',
+    //     icon: Folder,
+    // },
+    // {
+    //     title: 'Documentation',
+    //     href: 'https://laravel.com/docs/starter-kits#vue',
+    //     icon: BookOpen,
+    // },
 ];
 </script>
 

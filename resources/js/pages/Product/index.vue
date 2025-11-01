@@ -4,24 +4,36 @@ import { index, destroy, create, edit } from '@/routes/product/index';
 import { dashboard } from '@/routes';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
-import { defineProps } from 'vue';
-import { Pencil, Trash, Package } from 'lucide-vue-next';
+import { defineProps, ref, watch } from 'vue';
+import { Pencil, Trash, Package, Search, Tag, DollarSign, Factory, Boxes } from 'lucide-vue-next';
+import { debounce } from 'lodash';
 
 // --- SHADCN/VUE IMPORTS ---
-import { Button } from '@/components/ui/button';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { BreadcrumbItem, Product } from '@/types';
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Input from '@/components/ui/input/Input.vue';
+import { Link } from '@inertiajs/vue3' // Import Link for pagination
+
+import { BreadcrumbItem, Product, type InertiaLink } from '@/types';
 
 // --- PROPS ---
-defineProps<{
-  products: Product[]
+// Updated props to receive a paginated structure and filters
+const props = defineProps<{
+  products: {
+    data: Product[],
+    links: InertiaLink[], // Laravel's pagination links object
+    last_page: number
+  };
+  filters: {
+    search: string | null;
+  };
 }>();
 
 // --- LOGIC ---
@@ -35,6 +47,27 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: index().url,
   },
 ];
+
+// State for the search input
+const search = ref(props.filters.search || '');
+
+// Watch for changes in the search input and perform a visit
+watch(search, debounce((value) => {
+  // Perform an Inertia GET request
+  router.get(
+    index().url,
+    { search: value }, // Pass the search query as data
+    {
+      preserveState: true, // Preserve the component state
+      replace: true, // Replace the current history state
+    }
+  );
+}, 300));
+
+// Function to check if a pagination link is active/current page
+const isActiveLink = (link: InertiaLink) => {
+  return link.active && link.label !== '...';
+};
 
 const goToCreate = () => router.visit(create().url);
 
@@ -54,67 +87,78 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
         <Package class="h-6 w-6 mr-2 text-indigo-600" />
         Products Catalog
       </h3>
-      <Button class="max-w-40" @click="goToCreate">Add new Product</Button>
-      <div class="relative min-h-[50vh] flex-1 rounded-xl border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                Name
-              </TableHead>
-              <TableHead>
-                REF
-              </TableHead>
-              <TableHead>
-                Category
-              </TableHead>
-              <TableHead>
-                Supplier
-              </TableHead>
-              <TableHead class="text-right">
-                Selling Price
-              </TableHead>
-              <TableHead class="w-[120px]">
-                Actions
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <!-- Check if products list is empty -->
-            <TableRow v-if="products.length === 0">
-              <TableCell colspan="6" class="text-center py-8 text-gray-500 italic">
-                No products found. Click "Add new Product" to get started.
-              </TableCell>
-            </TableRow>
 
-            <TableRow v-for="product in products" :key="product.id">
-              <TableCell class="font-medium">
-                {{ product.name }}
-              </TableCell>
-              <TableCell class="text-xs text-gray-500">
-                {{ product.ref }}
-              </TableCell>
-              <TableCell>
-                {{ product.product_category.name }}
-              </TableCell>
-              <TableCell>
-                {{ product.supplier.name }}
-              </TableCell>
-              <TableCell class="text-right font-semibold text-green-700">
-                ${{ product.price }}
-              </TableCell>
-              <TableCell class="flex items-center space-x-1">
-                <Button class="h-8 w-8 p-1 bg-blue-500 hover:bg-blue-600" @click="goToEdit(product.id)">
-                  <Pencil class="h-4 w-4" />
-                </Button>
-                <!-- Using DeleteConfirm component for standard deletion flow -->
-                <!-- The mock destroy route is used here -->
-                <DeleteConfirm :binded="destroy.form(product.id)" resource="product" :icon="Trash">
-                </DeleteConfirm>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+      <!-- Search and Add new bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="relative w-full max-w-sm">
+          <Input type="text" placeholder="Search products (name, ref, supplier, category)..." v-model="search"
+            class="pl-10" />
+          <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
+        <Button class="w-full sm:w-auto sm:max-w-40" @click="goToCreate">Add new Product</Button>
+      </div>
+
+
+      <div class="relative flex-1 rounded-xl border p-4">
+
+        <!-- Responsive Card Grid -->
+        <div v-if="props.products.data.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <Card v-for="product in props.products.data" :key="product.id" class="flex flex-col justify-between">
+            <CardHeader class="pb-3">
+              <CardTitle class="text-lg">{{ product.name }}</CardTitle>
+              <CardDescription class="flex items-center text-sm">
+                <Tag class="h-4 w-4 mr-1 text-gray-500" />
+                REF: <span class="ml-1 font-medium text-foreground">{{ product.ref }}</span>
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent class="text-sm space-y-2">
+              <p class="flex items-center text-muted-foreground">
+                <Boxes class="h-4 w-4 mr-2" />
+                Category: <span class="ml-1 font-medium text-foreground">{{ product.product_category.name }}</span>
+              </p>
+              <p class="flex items-center text-muted-foreground">
+                <Factory class="h-4 w-4 mr-2" />
+                Supplier: <span class="ml-1 font-medium text-foreground">{{ product.supplier.name }}</span>
+              </p>
+              <p class="flex items-center text-2xl font-bold text-green-600 pt-2">
+                <DollarSign class="h-5 w-5 mr-1" />
+                {{ product.price }}
+              </p>
+            </CardContent>
+
+            <CardFooter class="flex justify-end gap-2">
+              <Button variant="outline" size="icon" @click="goToEdit(product.id)">
+                <Pencil class="h-4 w-4" />
+              </Button>
+              <DeleteConfirm :binded="destroy.form(product.id)" resource="product" :icon="Trash">
+              </DeleteConfirm>
+            </CardFooter>
+          </Card>
+        </div>
+
+        <!-- "No products" message -->
+        <div v-if="props.products.data.length === 0"
+          class="flex items-center justify-center py-20 text-muted-foreground">
+          No products found.
+        </div>
+
+        <!-- Pagination -->
+        <div class="p-4 flex justify-center mt-6" v-if="props.products.last_page > 1">
+          <div class="flex flex-wrap justify-center space-x-2">
+            <template v-for="(link, index) in props.products.links" :key="index">
+              <Link v-if="link.url" :href="link.url" preserve-scroll preserve-state
+                class="px-3 py-1 text-sm border rounded mb-2" :class="{
+                  'bg-primary text-primary-foreground border-primary': isActiveLink(link),
+                  'hover:bg-accent hover:text-accent-foreground': !isActiveLink(link),
+                  'text-muted-foreground border-border': link.label === '...'
+                }"><span v-html="link.label"></span></Link>
+              <span v-else class="px-3 py-1 text-sm border rounded mb-2 text-muted-foreground border-border"
+                v-html="link.label" />
+            </template>
+          </div>
+        </div>
       </div>
     </div>
   </AppLayout>

@@ -12,11 +12,29 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::all();
+        // Get the search term from the request, default to null
+        $search = $request->input('search');
+
+        // Build the query
+        $clients = Client::query()
+            ->when($search, function ($query, $search) {
+                // Apply the search filter if a term is present
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('ice', 'like', "%{$search}%"); // Add more columns as needed
+            })
+            // Paginate the results (e.g., 10 per page)
+            // ->withQueryString() is crucial to preserve the search filter when paginating
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('Client/index', [
-            'clients' => $clients
+            'clients' => $clients, // Pass the paginated object
+            'filters' => [
+                'search' => $search, // Pass the current search term back to the component
+            ],
         ]);
     }
 

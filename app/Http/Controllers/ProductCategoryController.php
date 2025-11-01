@@ -10,12 +10,31 @@ class ProductCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = ProductCategory::all();
+        // Get current filters from the request
+        $filters = $request->only(['search']);
+
+        $categories = ProductCategory::query()
+            // Apply search filter if present
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            // Sort by name for alphabetical display
+            ->orderBy('name')
+            // Paginate the results (suitable for a card grid)
+            ->paginate(12)
+            // Keep the search filter in the pagination links
+            ->withQueryString();
+
+        // Pass the paginated data and the current filters to the Inertia view
         return Inertia::render('ProductCategory/index', [
-            'categories' => $categories
+            'categories' => $categories,
+            'filters' => $filters,
         ]);
     }
 

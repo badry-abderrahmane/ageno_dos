@@ -11,12 +11,33 @@ class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $suppliers = Supplier::all();
+        // Get current filters from the request
+        $filters = $request->only(['search']);
+
+        $suppliers = Supplier::query()
+            // Apply search filter if present
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            })
+            // Sort by most recently created suppliers
+            ->latest()
+            // Paginate the results (12 items per page is suitable for the card grid view)
+            ->paginate(12)
+            // Keep the search filter in the pagination links
+            ->withQueryString();
+
+        // Pass the paginated data and the current filters to the Inertia view
         return Inertia::render('Supplier/index', [
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
+            'filters' => $filters,
         ]);
     }
 

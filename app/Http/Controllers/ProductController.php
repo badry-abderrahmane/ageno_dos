@@ -10,11 +10,45 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
+     */
+    public function index(Request $request)
     {
-        $products = Product::with(['supplier', 'productCategory'])->get();
+        // Get current filters from the request
+        $filters = $request->only(['search']);
+
+        $products = Product::with(['productCategory', 'supplier'])
+            // Apply search filter if present
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    // Search by product name or reference
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('ref', 'like', '%' . $search . '%');
+                })
+                    // Search in related Product Category name
+                    ->orWhereHas('productCategory', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
+                    // Search in related Supplier name
+                    ->orWhereHas('supplier', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+            })
+            // Sort by most recently created products
+            ->latest()
+            // Paginate the results (12 items per page is suitable for the card grid view)
+            ->paginate(12)
+            // Keep the search filter in the pagination links
+            ->withQueryString();
+
+        // Pass the paginated data and the current filters to the Inertia view
         return Inertia::render('Product/index', [
-            'products' => $products
+            'products' => $products,
+            'filters' => $filters,
         ]);
     }
 

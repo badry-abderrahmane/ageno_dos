@@ -15,11 +15,34 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::with('client')->where('status', 'not_paid')->get();
+        // 1. Get current filters (currently just 'search')
+        $filters = $request->only(['search']);
+
+        $invoices = Invoice::with('client')
+            // 2. Apply search filter if present
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    // Search by Invoice fields (e.g., status or total)
+                    $query->where('status', 'like', '%' . $search . '%')
+                        ->orWhere('total', 'like', '%' . $search . '%');
+                })
+                    // Search in related Client name
+                    ->orWhereHas('client', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+            })
+            // NOTE: I removed the original `where('status', 'not_paid')` to allow searching across all invoices.
+            // If you need to filter the base list, add it back here.
+            ->latest() // Order by most recent invoices first
+            ->paginate(12) // Use 12 items per page, suitable for a card grid view (3 or 4 columns)
+            ->withQueryString(); // Keep search filter active on pagination links
+
+        // 3. Pass both invoices and filters to the Inertia view
         return Inertia::render('Invoice/index', [
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'filters' => $filters,
         ]);
     }
 
