@@ -11,6 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('organizations', function (Blueprint $table) {
+            $table->id();
+            $table->string('org_name');
+            $table->string('org_footer')->nullable()->default('');
+            $table->string('org_modality')->nullable()->default('');
+            $table->string('org_bank')->nullable()->default('');
+            $table->string('org_logo')->nullable()->default('');
+            $table->string('org_color')->nullable()->default('');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -44,6 +55,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('organizations');
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
