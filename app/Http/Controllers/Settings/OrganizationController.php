@@ -46,11 +46,7 @@ class OrganizationController extends Controller
         $organization = $user->organization;
 
         if (! $organization) {
-            $organization = Organization::create([
-                'org_name' => $user->name . "'s Organization",
-            ]);
-            $user->organization()->associate($organization);
-            $user->save();
+            abort(404, 'No organization.');
         }
 
         $validated = $request->validate([

@@ -25,6 +25,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { toast } from 'vue-sonner';
+import { ref } from 'vue';
 
 // --- TYPE DEFINITIONS (Simulated) ---
 interface Supplier { id: number, name: string }
@@ -54,6 +55,7 @@ const props = defineProps<{
 
 // --- INERTIA FORM LOGIC SIMULATION ---
 const isEdit = !!props.product;
+const showStockInputs = ref(false)
 
 // Simulating the useForm structure:
 const form = useForm({
@@ -180,72 +182,85 @@ const breadcrumbs: BreadcrumbItem[] = [
               </div>
             </div>
 
-            <!-- --- Section 3: Pricing and Logistics --- -->
-            <h3 class="text-lg font-semibold border-b pb-1 pt-2">
-              Pricing & Stock
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div class="grid gap-2">
-                <Label for="supplier_price">Supplier Price</Label>
-                <Input id="supplier_price" type="number" step="0.01" min="0" :tabindex="5" name="supplier_price"
-                  placeholder="0.00" v-model="form.supplier_price" :disabled="form.processing"
-                  :class="{ 'border-red-500': form.errors.supplier_price }" />
-                <InputError :message="form.errors.supplier_price" />
-              </div>
-
-              <div class="grid gap-2">
-                <Label for="price">Selling Price <span class="text-red-500">*</span></Label>
-                <Input id="price" type="number" step="0.01" min="0" required :tabindex="6" name="price"
-                  placeholder="0.00" v-model="form.price" :disabled="form.processing"
-                  :class="{ 'border-red-500': form.errors.price }" />
-                <InputError :message="form.errors.price" />
-              </div>
-
-              <div class="grid gap-2">
-                <Label for="min_qty">Min Order Qty</Label>
-                <Input id="min_qty" type="number" min="0" :tabindex="7" name="min_qty" placeholder="0"
-                  v-model="form.min_qty" :disabled="form.processing"
-                  :class="{ 'border-red-500': form.errors.min_qty }" />
-                <InputError :message="form.errors.min_qty" />
-              </div>
-
-              <div class="grid gap-2">
-                <Label for="max_qty">Max Order Qty</Label>
-                <Input id="max_qty" type="number" min="0" :tabindex="8" name="max_qty" placeholder="0"
-                  v-model="form.max_qty" :disabled="form.processing"
-                  :class="{ 'border-red-500': form.errors.max_qty }" />
-                <InputError :message="form.errors.max_qty" />
-              </div>
+            <div class="w-30">
+              <Button variant="outline" size="sm" class="text-sm text-gray-600 " v-if="!showStockInputs"
+                @click="showStockInputs = true">Show
+                extra fileds</Button>
+              <Button variant="outline" size="sm" class="text-sm text-gray-600 " v-else
+                @click="showStockInputs = false">Hide
+                extra fileds</Button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="grid gap-2">
-                <Label for="img">Image URL/Path</Label>
-                <Input id="img" type="text" :tabindex="9" name="img" placeholder="/images/sensor_v2.jpg"
-                  v-model="form.img" :disabled="form.processing" :class="{ 'border-red-500': form.errors.img }" />
-                <InputError :message="form.errors.img" />
-              </div>
-              <div class="grid gap-2">
-                <Label for="delivery_time">Delivery Time (Days)</Label>
-                <Input id="delivery_time" type="number" min="0" :tabindex="10" name="delivery_time" placeholder="0"
-                  v-model="form.delivery_time" :disabled="form.processing"
-                  :class="{ 'border-red-500': form.errors.delivery_time }" />
-                <InputError :message="form.errors.delivery_time" />
-              </div>
-            </div>
+            <template v-if="showStockInputs">
+              <!-- --- Section 3: Pricing and Logistics --- -->
+              <h3 class="text-lg font-semibold border-b pb-1 pt-2">
+                Pricing & Stock
 
-            <!-- --- Section 4: Notes --- -->
-            <h3 class="text-lg font-semibold border-b pb-1 pt-2">
-              Additional Information
-            </h3>
-            <div class="grid gap-2">
-              <Label for="note">Product Note/Description</Label>
-              <textarea id="note" rows="3"
-                class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm"
-                v-model="form.note" placeholder="Any internal notes or detailed description..." :tabindex="11"
-                :disabled="form.processing" :class="{ 'border-red-500': form.errors.note }"></textarea>
-              <InputError :message="form.errors.note" />
-            </div>
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid gap-2">
+                  <Label for="supplier_price">Supplier Price</Label>
+                  <Input id="supplier_price" type="number" step="0.01" min="0" :tabindex="5" name="supplier_price"
+                    placeholder="0.00" v-model="form.supplier_price" :disabled="form.processing"
+                    :class="{ 'border-red-500': form.errors.supplier_price }" />
+                  <InputError :message="form.errors.supplier_price" />
+                </div>
+
+                <div class="grid gap-2">
+                  <Label for="price">Selling Price </Label>
+                  <Input id="price" type="number" step="0.01" min="0" required :tabindex="6" name="price"
+                    placeholder="0.00" v-model="form.price" :disabled="form.processing"
+                    :class="{ 'border-red-500': form.errors.price }" />
+                  <InputError :message="form.errors.price" />
+                </div>
+
+                <div class="grid gap-2">
+                  <Label for="min_qty">Min Order Qty</Label>
+                  <Input id="min_qty" type="number" min="0" :tabindex="7" name="min_qty" placeholder="0"
+                    v-model="form.min_qty" :disabled="form.processing"
+                    :class="{ 'border-red-500': form.errors.min_qty }" />
+                  <InputError :message="form.errors.min_qty" />
+                </div>
+
+                <div class="grid gap-2">
+                  <Label for="max_qty">Max Order Qty</Label>
+                  <Input id="max_qty" type="number" min="0" :tabindex="8" name="max_qty" placeholder="0"
+                    v-model="form.max_qty" :disabled="form.processing"
+                    :class="{ 'border-red-500': form.errors.max_qty }" />
+                  <InputError :message="form.errors.max_qty" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid gap-2">
+                  <Label for="img">Image URL/Path</Label>
+                  <Input id="img" type="text" :tabindex="9" name="img" placeholder="/images/sensor_v2.jpg"
+                    v-model="form.img" :disabled="form.processing" :class="{ 'border-red-500': form.errors.img }" />
+                  <InputError :message="form.errors.img" />
+                </div>
+                <div class="grid gap-2">
+                  <Label for="delivery_time">Delivery Time (Days)</Label>
+                  <Input id="delivery_time" type="number" min="0" :tabindex="10" name="delivery_time" placeholder="0"
+                    v-model="form.delivery_time" :disabled="form.processing"
+                    :class="{ 'border-red-500': form.errors.delivery_time }" />
+                  <InputError :message="form.errors.delivery_time" />
+                </div>
+              </div>
+
+              <!-- --- Section 4: Notes --- -->
+              <h3 class="text-lg font-semibold border-b pb-1 pt-2">
+                Additional Information
+              </h3>
+              <div class="grid gap-2">
+                <Label for="note">Product Note/Description</Label>
+                <textarea id="note" rows="3"
+                  class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm"
+                  v-model="form.note" placeholder="Any internal notes or detailed description..." :tabindex="11"
+                  :disabled="form.processing" :class="{ 'border-red-500': form.errors.note }"></textarea>
+                <InputError :message="form.errors.note" />
+              </div>
+            </template>
+
 
             <Button type="submit" class="mt-2 w-full" tabindex="12" :disabled="form.processing">
               <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin mr-2" />

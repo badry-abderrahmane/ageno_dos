@@ -98,7 +98,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
       </div>
 
 
-      <div class="relative flex-1 rounded-xl border p-4">
+      <div class="relative flex-1 rounded-xl">
 
         <!-- Responsive Card Grid -->
         <div v-if="props.suppliers.data.length > 0"

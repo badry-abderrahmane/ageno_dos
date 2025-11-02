@@ -81,8 +81,7 @@ const isActiveLink = (link: InertiaLink) => {
       </div>
 
       <!-- Main content area -->
-      <div
-        class="relative flex-1 rounded-xl border border-sidebar-border/70 p-4 md:min-h-min dark:border-sidebar-border">
+      <div class="relative flex-1 rounded-xl border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
 
         <!-- Grid layout for cards -->
         <div v-if="clients.data.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

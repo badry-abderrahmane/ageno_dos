@@ -99,21 +99,16 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
       </div>
 
 
-      <div class="relative flex-1 rounded-xl border p-4">
+      <div class="relative flex-1 rounded-xl">
 
         <!-- Responsive Card Grid -->
         <div v-if="props.products.data.length > 0"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Card v-for="product in props.products.data" :key="product.id" class="flex flex-col justify-between">
-            <CardHeader class="pb-3">
-              <CardTitle class="text-lg">{{ product.name }}</CardTitle>
-              <CardDescription class="flex items-center text-sm">
-                <Tag class="h-4 w-4 mr-1 text-gray-500" />
 
-              </CardDescription>
-            </CardHeader>
 
             <CardContent class="text-sm space-y-2">
+              <CardTitle class="text-md">{{ product.name }}</CardTitle>
               <p class="flex items-center text-muted-foreground">
                 <Boxes class="h-4 w-4 mr-2" />
                 Category: <span class="ml-1 font-medium text-foreground">{{ product.product_category.name }}</span>
@@ -122,7 +117,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
                 <Factory class="h-4 w-4 mr-2" />
                 Supplier: <span class="ml-1 font-medium text-foreground">{{ product.supplier.name }}</span>
               </p>
-              <p class="flex items-center text-2xl font-bold text-green-600 pt-2">
+              <p v-if="product.price" class="flex items-center text-2xl font-bold text-green-600 pt-2">
                 <DollarSign class="h-5 w-5 mr-1" />
                 {{ product.price }}
               </p>

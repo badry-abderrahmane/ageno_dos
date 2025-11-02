@@ -66,4 +66,22 @@ class User extends Authenticatable
     {
         return $this->role === 'manager';
     }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            if (! $user->organization) {
+                $organization = Organization::create([
+                    'org_name' => $user->name . "'s Organization",
+                ]);
+                $user->organization()->associate($organization);
+                $user->save();
+            }
+        });
+    }
 }

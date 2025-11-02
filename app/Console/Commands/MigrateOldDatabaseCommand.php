@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,8 @@ class MigrateOldDatabaseCommand extends Command
     {
         $old = DB::connection('pgsql_old');
         $new = DB::connection('sqlite');
+
+        $this->insertBaseUsers();
 
         /**
          * Define table + column mappings:
@@ -185,6 +188,25 @@ class MigrateOldDatabaseCommand extends Command
         $this->showSummary($results);
     }
 
+    protected function insertBaseUsers()
+    {
+        $count = User::all()->count();
+        if ($count === 0) {
+            User::create([
+                'name' => 'Hamza Merrahi',
+                'email' => 'hamza@hsprint.ma',
+                'password' => 'hamza123',
+                'role' => 'admin'
+            ]);
+            User::create([
+                'name' => 'Abderrahmane Badry',
+                'email' => 'badry.abderrahmane@gmail.com',
+                'password' => 'badry123',
+                'role' => 'admin'
+            ]);
+        }
+    }
+
     /**
      * Reset PostgreSQL sequence after manual ID inserts.
      */
@@ -192,11 +214,11 @@ class MigrateOldDatabaseCommand extends Command
     {
         try {
             $conn->statement("
-SELECT setval(
-pg_get_serial_sequence('\"{$table}\"', 'id'),
-COALESCE((SELECT MAX(id) FROM \"{$table}\"), 1)
-)
-");
+                SELECT setval(
+                pg_get_serial_sequence('\"{$table}\"', 'id'),
+                COALESCE((SELECT MAX(id) FROM \"{$table}\"), 1)
+                )
+            ");
             $this->line("↳ Sequence reset for {$table}");
         } catch (\Exception $e) {
             $this->warn("⚠ Could not reset sequence for {$table}: {$e->getMessage()}");

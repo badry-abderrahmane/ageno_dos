@@ -41,7 +41,7 @@
     // ========================
     // COMPANY CONFIG VARIABLES
     // ========================
-    $baseColor = $organization->org_color ?? '#9E9E9E';
+    $baseColor = $organization->org_color ? $organization->org_color : '#9E9E9E';
     $tintColor = hexToBlendedHex($baseColor, '0.2');
 @endphp
 
@@ -139,7 +139,7 @@
             @endphp
             @foreach ($grouped as $catName => $items)
                 <tr style="background-color:#bdbdbd;">
-                    <td width="532"><b>{{ $catName }}</b></td>
+                    <td width="532"><b>{{ Str::upper($catName) }}</b></td>
                 </tr>
                 @foreach ($items as $key => $product)
                     <tr>
