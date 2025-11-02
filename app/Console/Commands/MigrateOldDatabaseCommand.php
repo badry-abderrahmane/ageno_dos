@@ -185,6 +185,10 @@ class MigrateOldDatabaseCommand extends Command
             }
         }
 
+        DB::table('invoices')
+            ->where('status', 'not_paid')
+            ->update(['status' => 'paid', 'updated_at' => now()]);
+
         $this->showSummary($results);
     }
 

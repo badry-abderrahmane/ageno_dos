@@ -47,17 +47,6 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function bills()
-    {
-        $invoices = Invoice::with('client')->where('status', 'paid')->get();
-        return Inertia::render('Invoice/bills', [
-            'invoices' => $invoices
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -196,12 +185,11 @@ class InvoiceController extends Controller
     /**
      * Download the specified invoice as a PDF.
      */
-    public function downloadPdf(Invoice $invoice, PdfInvoiceService $pdfService)
+    public function downloadPdf(Request $request, Invoice $invoice, PdfInvoiceService $pdfService)
     {
-        $pdfContent = $pdfService->download($invoice);
-
-        // Naming the file based on the design
-        $filename = "Facture-{$invoice->id}-" . date('Y') . ".pdf";
+        $type = $request->query('type');
+        $pdfContent = $pdfService->download($invoice, $type);
+        $filename = "{$type}-{$invoice->id}-" . date('Y') . ".pdf";
 
         return response($pdfContent, 200)
             ->header('Content-Type', 'application/pdf')

@@ -6,7 +6,7 @@ import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
 // Import new icons and utilities
-import { Pencil, Trash, Search, Download } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Download, File } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -22,6 +22,7 @@ import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 // Import Link for pagination
 import { Link } from '@inertiajs/vue3'
+import Badge from '@/components/ui/badge/Badge.vue';
 
 // Extend the props to receive a paginated structure and filters
 const props = defineProps<{
@@ -93,14 +94,26 @@ const isActiveLink = (link: InertiaLink) => {
           <Card v-for="invoice in invoices.data" :key="invoice.id" class="flex flex-col justify-between">
             <CardHeader>
               <CardTitle>{{ invoice.client.name }}</CardTitle>
-              <CardDescription>Status: {{ invoice.status }}</CardDescription>
-              <p class="text-lg font-semibold pt-2">Total: {{ invoice.total }}</p>
+              <CardDescription>
+                <Badge v-if="invoice.status === 'paid'" variant="success">
+                  {{ invoice.status.toUpperCase() }}
+                </Badge>
+                <Badge v-else variant="destructive">
+                  {{ invoice.status.toUpperCase() }}
+                </Badge>
+              </CardDescription>
+              <p class="text-lg text-gray-600 font-mono font-semibold italic text-right pt-2">{{ invoice.total }} DH</p>
             </CardHeader>
             <CardFooter class="flex justify-end gap-2">
               <Button variant="outline" size="icon" @click="router.visit(edit(invoice.id).url)">
                 <Pencil class="h-4 w-4" />
               </Button>
-              <a :href="download({ invoice: invoice.id }).url">
+              <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'quote' } }).url">
+                <Button variant="outline" size="icon">
+                  <File class="h-4 w-4" />
+                </Button>
+              </a>
+              <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'invoice' } }).url">
                 <Button variant="outline" size="icon">
                   <Download class="h-4 w-4" />
                 </Button>

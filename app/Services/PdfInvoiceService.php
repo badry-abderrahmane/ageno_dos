@@ -11,7 +11,7 @@ class PdfInvoiceService
     /**
      * Stream the PDF directly to the browser.
      */
-    public function download(Invoice $invoice)
+    public function download(Invoice $invoice, $type)
     {
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -41,7 +41,10 @@ class PdfInvoiceService
 
         $pdf->AddPage();
 
-        $html = view('pdf.invoice', [
+        $view = $type === 'quote' ? 'pdf.quote' : 'pdf.invoice';
+        $filename = "{$type}-{$invoice->id}-" . date('Y') . ".pdf";
+
+        $html = view($view, [
             'invoice' => $invoice,
             'date' => Carbon::now()->format('d/m/Y'),
             'organization' => Auth::user()->organization
@@ -49,6 +52,6 @@ class PdfInvoiceService
 
         $pdf->writeHTML($html, true, false, true, false, '');
 
-        return $pdf->Output('facture_' . $invoice->id . '.pdf', 'I');
+        return $pdf->Output($filename, 'I');
     }
 }

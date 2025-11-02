@@ -26,8 +26,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/api/clients', [ClientController::class, 'apiIndex'])->name('api.clients');
     Route::get('/api/clients/{client}', [ClientController::class, 'show'])->name('api.clients.show');
 
-
-    Route::get('/invoice/bill', [InvoiceController::class, 'bills'])->name('invoice.bill');
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])
         ->name('invoice.download');
     Route::resource('invoice', InvoiceController::class);

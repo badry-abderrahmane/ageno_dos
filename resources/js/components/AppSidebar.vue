@@ -19,7 +19,7 @@ import supplier from '@/routes/supplier/index'
 import productCategory from '@/routes/productCategory/index'
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Package, Briefcase, LayoutGrid, FileText, Receipt, Store, Boxes } from 'lucide-vue-next';
+import { Package, Briefcase, LayoutGrid, FileText, Store, Boxes } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -37,11 +37,6 @@ const mainNavItems: NavItem[] = [
         title: 'Invoices',
         href: invoice.index(),
         icon: FileText,
-    },
-    {
-        title: 'Bills',
-        href: invoice.bill(),
-        icon: Receipt,
     },
     {
         title: 'Suppliers',
