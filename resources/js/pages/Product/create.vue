@@ -2,6 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { store, create, update } from '@/routes/product/index';
 import { dashboard } from '@/routes';
+import apiRoutes from '@/routes/api/index';
 import { Head, useForm } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -9,14 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-vue-next';
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {
   Card,
   CardContent,
@@ -26,6 +19,7 @@ import {
 } from '@/components/ui/card'
 import { toast } from 'vue-sonner';
 import { ref } from 'vue';
+import VirtualSelect from '@/components/VirtualSelect.vue';
 
 // --- TYPE DEFINITIONS (Simulated) ---
 interface Supplier { id: number, name: string }
@@ -146,38 +140,17 @@ const breadcrumbs: BreadcrumbItem[] = [
               <!-- Product Category Select -->
               <div class="grid gap-2">
                 <Label for="product_category_id">Product Category <span class="text-red-500">*</span></Label>
-                <Select id="product_category_id" name="product_category_id"
-                  v-model:model-value="form.product_category_id" :disabled="form.processing">
-                  <SelectTrigger :class="{ 'border-red-500': form.errors.product_category_id }">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem v-for="category in categories" :key="category.id" :value="category.id">
-                        {{ category.name }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <VirtualSelect label="Category" placeholder="Select a category"
+                  :fetch-url="apiRoutes.productCategories().url" v-model="form.product_category_id"
+                  :error="form.errors.product_category_id" :disabled="form.processing" />
                 <InputError :message="form.errors.product_category_id" />
               </div>
 
               <!-- Supplier Select -->
               <div class="grid gap-2">
                 <Label for="supplier_id">Supplier <span class="text-red-500">*</span></Label>
-                <Select id="supplier_id" name="supplier_id" v-model:model-value="form.supplier_id"
-                  :disabled="form.processing">
-                  <SelectTrigger :class="{ 'border-red-500': form.errors.supplier_id }">
-                    <SelectValue placeholder="Select a supplier" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
-                        {{ supplier.name }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <VirtualSelect label="Supplier" placeholder="Select a supplier" :fetch-url="apiRoutes.suppliers().url"
+                  v-model="form.supplier_id" :error="form.errors.supplier_id" :disabled="form.processing" />
                 <InputError :message="form.errors.supplier_id" />
               </div>
             </div>

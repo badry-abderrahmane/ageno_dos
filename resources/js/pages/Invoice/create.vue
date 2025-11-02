@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { store, update, create } from '@/routes/invoice/index'
+import apiRoutes from '@/routes/api/index'
 import { Plus, Trash, DollarSign, Package, FileText, LoaderCircle } from 'lucide-vue-next';
 
 // --- ASSUMED INERTIA/PROJECT IMPORTS ---
@@ -32,6 +33,7 @@ import {
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Client, Product } from '@/types';
+import VirtualSelect from '@/components/VirtualSelect.vue';
 
 
 interface InvoiceLineItem {
@@ -120,9 +122,11 @@ const updateItemPrice = (index: number) => {
   const item = form.line_items[index];
   if (item.product_id) {
     // Find the standard price and set it to the line item's price
-    item.price = getProductPrice(item.product_id);
+    item.price = getProductPrice(item.product_id) || 0;
+    item.qty = 0;
   } else {
     item.price = 0;
+    item.qty = 0;
   }
 };
 
@@ -196,20 +200,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
               <!-- Client Select -->
               <div class="grid gap-2 col-span-1 md:col-span-2">
-                <Label for="client_id">Client <span class="text-red-500">*</span></Label>
-                <Select id="client_id" name="client_id" v-model:model-value="form.client_id" required
-                  :disabled="form.processing">
-                  <SelectTrigger :class="{ 'border-red-500': form.errors.client_id }">
-                    <SelectValue placeholder="Select a client" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem v-for="client in clients" :key="client.id" :value="client.id">
-                        {{ client.name }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <VirtualSelect label="Client" placeholder="Select a client" :fetch-url="apiRoutes.clients().url"
+                  v-model:model-value="form.client_id" id="client_id" :error="form.errors.client_id"
+                  :disabled="form.processing" />
                 <InputError :message="form.errors.client_id" />
               </div>
 
@@ -249,21 +242,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                 <!-- Product Select -->
                 <div class="grid gap-2 col-span-12 md:col-span-5">
-                  <Label :for="`product_${index}`" class="text-sm font-semibold">Product</Label>
-                  <Select :id="`product_${index}`" v-model:model-value="item.product_id"
-                    @update:model-value="updateItemPrice(index)" :disabled="form.processing">
-                    <SelectTrigger :class="{ 'border-red-500': form.errors[`line_items.${index}.product_id`] }">
-                      <SelectValue placeholder="Select a product" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem v-for="product in availableProducts" :key="product.id" :value="product.id">
-                          {{ product.name }} ({{ parseFloat(product.price).toFixed(2) }})
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <InputError :message="form.errors[`line_items.${index}.product_id`]" />
+                  <VirtualSelect label="Product" placeholder="Select a product" :fetch-url="apiRoutes.products().url"
+                    v-model:model-value="item.product_id" :id="`product_${index}`"
+                    @update:model-value="updateItemPrice(index)" :error="form.errors[`line_items.${index}.product_id`]"
+                    :disabled="form.processing" />
                 </div>
 
                 <!-- Unit Price Input -->

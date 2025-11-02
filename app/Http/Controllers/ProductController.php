@@ -51,6 +51,25 @@ class ProductController extends Controller
         ]);
     }
 
+    public function apiIndex(Request $request)
+    {
+        $filters = $request->only(['search']);
+
+        $products = Product::query()
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        // Return JSON data (not Inertia)
+        return response()->json([
+            'data' => $products->items(),
+            'next_page_url' => $products->nextPageUrl(),
+        ]);
+    }
+
     public function create()
     {
         return Inertia::render('Product/create', [
@@ -81,7 +100,10 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        //
+        return response()->json([
+            'id' => $product->id,
+            'name' => $product->name,
+        ]);
     }
 
     public function edit(Product $product)

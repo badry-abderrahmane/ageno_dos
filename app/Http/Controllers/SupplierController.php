@@ -41,6 +41,25 @@ class SupplierController extends Controller
         ]);
     }
 
+    public function apiIndex(Request $request)
+    {
+        $filters = $request->only(['search']);
+
+        $suppliers = Supplier::query()
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        // Return JSON data (not Inertia)
+        return response()->json([
+            'data' => $suppliers->items(),
+            'next_page_url' => $suppliers->nextPageUrl(),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -73,7 +92,10 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        return response()->json([
+            'id' => $supplier->id,
+            'name' => $supplier->name,
+        ]);
     }
 
     /**

@@ -21,14 +21,28 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::resource('client', ClientController::class);
+    Route::get('/api/clients', [ClientController::class, 'apiIndex'])->name('api.clients');
+    Route::get('/api/clients/{client}', [ClientController::class, 'show'])->name('api.clients.show');
+
+
     Route::get('/invoice/bill', [InvoiceController::class, 'bills'])->name('invoice.bill');
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])
         ->name('invoice.download');
     Route::resource('invoice', InvoiceController::class);
+
     Route::resource('product', ProductController::class);
+    Route::get('/api/products', [ProductController::class, 'apiIndex'])->name('api.products');
+    Route::get('/api/products/{product}', [ProductController::class, 'show'])->name('api.products.show');
+
     Route::resource('supplier', SupplierController::class);
+    Route::get('/api/suppliers', [SupplierController::class, 'apiIndex'])->name('api.suppliers');
+    Route::get('/api/suppliers/{supplier}', [SupplierController::class, 'show'])->name('api.suppliers.show');
+
     Route::resource('productCategory', ProductCategoryController::class);
+    Route::get('/api/productCategory', [ProductCategoryController::class, 'apiIndex'])->name('api.productCategories');
+    Route::get('/api/productCategory/{category}', [ProductCategoryController::class, 'show'])->name('api.productCategories.show');
 });
 
 

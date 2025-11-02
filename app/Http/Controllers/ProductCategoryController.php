@@ -38,6 +38,25 @@ class ProductCategoryController extends Controller
         ]);
     }
 
+    public function apiIndex(Request $request)
+    {
+        $filters = $request->only(['search']);
+
+        $categories = ProductCategory::query()
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        // Return JSON data (not Inertia)
+        return response()->json([
+            'data' => $categories->items(),
+            'next_page_url' => $categories->nextPageUrl(),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -63,9 +82,12 @@ class ProductCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductCategory $productCategory)
+    public function show(ProductCategory $category)
     {
-        //
+        return response()->json([
+            'id' => $category->id,
+            'name' => $category->name,
+        ]);
     }
 
     /**

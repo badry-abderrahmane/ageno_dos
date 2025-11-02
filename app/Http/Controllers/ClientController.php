@@ -38,6 +38,25 @@ class ClientController extends Controller
         ]);
     }
 
+    public function apiIndex(Request $request)
+    {
+        $filters = $request->only(['search']);
+
+        $clients = Client::query()
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        // Return JSON data (not Inertia)
+        return response()->json([
+            'data' => $clients->items(),
+            'next_page_url' => $clients->nextPageUrl(),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -66,7 +85,10 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return response()->json([
+            'id' => $client->id,
+            'name' => $client->name,
+        ]);
     }
 
     /**
