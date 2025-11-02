@@ -18,7 +18,7 @@ class MigrateOldDatabaseCommand extends Command
     public function handle()
     {
         $old = DB::connection('pgsql_old');
-        $new = DB::connection('sqlite');
+        $new = DB::connection();
 
         $this->insertBaseUsers();
 
