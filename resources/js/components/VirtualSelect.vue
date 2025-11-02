@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, nextTick } from 'vue'
-import { Input } from '@/components/ui/input'
-import { LoaderCircle, Search } from 'lucide-vue-next'
+import { LoaderCircle, Search, Check, X } from 'lucide-vue-next'
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
+  Combobox,
+  ComboboxAnchor,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxTrigger,
+  ComboboxItem,
+  ComboboxItemIndicator,
+  ComboboxList,
+} from '@/components/ui/combobox'
 
 const props = defineProps<{
   label: string
@@ -21,13 +25,11 @@ const props = defineProps<{
 const emit = defineEmits(['update:modelValue'])
 
 const search = ref('')
-const open = ref(false)
 const items = ref<{ id: number; name: string }[]>([])
 const nextPage = ref<string | null>(null)
 const loading = ref(false)
-const selectedLabel = ref('')
+const selected = ref()
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
-const searchInputRef = ref<HTMLInputElement | null>(null)
 
 // --- Fetch paginated data ---
 const load = async (url?: string) => {
@@ -55,20 +57,10 @@ const loadSelectedItem = async (id: number) => {
     if (!existing) {
       items.value.unshift(data)
     }
-    selectedLabel.value = data.name
+    selected.value = data
   } catch (e) {
     console.warn('Failed to preload selected item', e)
   }
-}
-
-const loadMore = async () => {
-  if (nextPage.value) await load(nextPage.value)
-}
-
-const handleScroll = (e: Event) => {
-  const target = e.target as HTMLElement
-  const bottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 20
-  if (bottom && nextPage.value) loadMore()
 }
 
 // --- Debounce search ---
@@ -77,19 +69,19 @@ watch(search, () => {
   debounceTimer = setTimeout(async () => {
     await load()
     await nextTick()
-    searchInputRef.value?.focus()
+    //searchInputRef.value?.focus()
   }, 600)
 })
 
 // --- Sync selected label ---
 watch(() => props.modelValue, async (val) => {
   if (!val) {
-    selectedLabel.value = ''
+    selected.value = undefined
     return
   }
   const found = items.value.find(i => i.id === val)
   if (found) {
-    selectedLabel.value = found.name
+    selected.value = found
   } else {
     await loadSelectedItem(val)
   }
@@ -105,8 +97,46 @@ onMounted(async () => {
 
 <template>
   <div class="grid gap-2">
-    <label class="text-sm font-medium">{{ props.label }}</label>
-    <Popover v-model:open="open">
+    <label class="text-sm font-bold">{{ props.label }}</label>
+    <Combobox v-model="selected" @update:model-value="(val: any) => emit('update:modelValue', val?.id || '')">
+      <ComboboxAnchor class="w-auto">
+        <ComboboxTrigger as-child>
+          <div class="relative w-full items-center">
+            <ComboboxInput v-model="search" class="pl-9" :display-value="(val) => val?.name ?? ''"
+              placeholder="Select product..." />
+            <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
+              <Search class="size-4 text-muted-foreground" />
+            </span>
+            <span v-if="selected || search" @click="emit('update:modelValue', undefined); search = ''"
+              class="absolute end-0 inset-y-0 flex items-center justify-center px-3">
+              <X class="size-4 text-muted-foreground" />
+            </span>
+          </div>
+        </ComboboxTrigger>
+
+      </ComboboxAnchor>
+      <ComboboxList class="w-[270px]">
+        <ComboboxEmpty>
+          <div v-if="loading" class="flex items-center justify-center py-2">
+            <LoaderCircle class="w-4 h-4 animate-spin" />
+          </div>
+
+          <div v-if="!loading && items.length === 0" class="text-center text-sm text-muted-foreground py-2">
+            No results found
+          </div>
+        </ComboboxEmpty>
+        <ComboboxGroup class="max-h-50 overflow-y-auto">
+          <ComboboxItem v-for="item in items" :key="item.name" :value="item">
+            {{ item.name }}
+            <ComboboxItemIndicator>
+              <Check class="ml-auto size-4" />
+            </ComboboxItemIndicator>
+          </ComboboxItem>
+        </ComboboxGroup>
+      </ComboboxList>
+    </Combobox>
+
+    <!-- <Popover v-model:open="open">
       <PopoverTrigger as-child>
         <Button variant="outline" class="w-full justify-between truncate" :disabled="props.disabled">
           <span>{{ selectedLabel || props.placeholder || 'Select...' }}</span>
@@ -137,7 +167,7 @@ onMounted(async () => {
           </div>
         </div>
       </PopoverContent>
-    </Popover>
+    </Popover> -->
     <p v-if="props.error" class="text-xs text-red-500">{{ props.error }}</p>
   </div>
 </template>

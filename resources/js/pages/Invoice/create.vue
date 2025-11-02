@@ -178,10 +178,10 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head :title="isEdit ? 'Edit Invoice' : 'Create Invoice'" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-4 md:p-8">
+    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-2 md:p-4">
 
       <!-- Main Card -->
-      <Card class="shadow-lg border-t-4 ">
+      <Card class="shadow-none">
         <CardHeader>
           <CardTitle class="flex items-center text-2xl font-bold ">
             <FileText class="w-6 h-6 mr-3" />
@@ -218,8 +218,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <SelectGroup>
                       <SelectItem value="not_paid"> Not Paid </SelectItem>
                       <SelectItem value="paid"> Paid </SelectItem>
-                      <SelectItem value="partially_paid"> Partially Paid </SelectItem>
-                      <SelectItem value="cancelled"> Cancelled </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -242,8 +240,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                 <!-- Product Select -->
                 <div class="grid gap-2 col-span-12 md:col-span-5">
-                  <VirtualSelect label="Product" placeholder="Select a product" :fetch-url="apiRoutes.products().url"
-                    v-model:model-value="item.product_id" :id="`product_${index}`"
+                  <VirtualSelect :label="`Product ${index + 1}`" placeholder="Select a product"
+                    :fetch-url="apiRoutes.products().url" v-model:model-value="item.product_id" :id="`product_${index}`"
                     @update:model-value="updateItemPrice(index)" :error="form.errors[`line_items.${index}.product_id`]"
                     :disabled="form.processing" />
                 </div>

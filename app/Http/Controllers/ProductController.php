@@ -60,7 +60,7 @@ class ProductController extends Controller
                 $query->where('name', 'like', "%{$search}%");
             })
             ->orderBy('name')
-            ->paginate(15)
+            ->paginate(20)
             ->withQueryString();
 
         // Return JSON data (not Inertia)
