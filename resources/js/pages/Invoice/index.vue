@@ -6,7 +6,7 @@ import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
 // Import new icons and utilities
-import { Pencil, Trash, Search, Download, File } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Download, File, FileText } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -23,6 +23,7 @@ import Input from '@/components/ui/input/Input.vue';
 // Import Link for pagination
 import { Link } from '@inertiajs/vue3'
 import Badge from '@/components/ui/badge/Badge.vue';
+import PageHeader from '@/components/PageHeader.vue';
 
 // Extend the props to receive a paginated structure and filters
 const props = defineProps<{
@@ -72,9 +73,7 @@ const isActiveLink = (link: InertiaLink) => {
   <AppLayout :breadcrumbs="breadcrumbs">
 
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <h3 class="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
-        Invoices list
-      </h3>
+      <PageHeader title="Invoices list" :icon="FileText"></PageHeader>
 
       <!-- Search and Add new bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">

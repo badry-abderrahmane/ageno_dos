@@ -5,7 +5,7 @@ import { Client, type BreadcrumbItem, type InertiaLink } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Search } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Briefcase } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -19,6 +19,7 @@ import {
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import { Link } from '@inertiajs/vue3' // Import Link for pagination
+import PageHeader from '@/components/PageHeader.vue';
 
 // Extend the props to receive a paginated structure and filters
 const props = defineProps<{
@@ -69,9 +70,7 @@ const isActiveLink = (link: InertiaLink) => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <h3 class="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
-        Clients list
-      </h3>
+      <PageHeader title="Clients List" :icon="Briefcase"></PageHeader>
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="relative w-full max-w-sm">
           <Input type="text" placeholder="Search clients..." v-model="search" class="pl-10" />

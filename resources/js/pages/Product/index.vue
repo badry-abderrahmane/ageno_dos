@@ -5,15 +5,13 @@ import { dashboard } from '@/routes';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Package, Search, Tag, DollarSign, Factory, Boxes } from 'lucide-vue-next';
+import { Pencil, Trash, Package, Search, DollarSign, Factory, Boxes } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // --- SHADCN/VUE IMPORTS ---
 import {
   Card,
-  CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
@@ -22,6 +20,7 @@ import Input from '@/components/ui/input/Input.vue';
 import { Link } from '@inertiajs/vue3' // Import Link for pagination
 
 import { BreadcrumbItem, Product, type InertiaLink } from '@/types';
+import PageHeader from '@/components/PageHeader.vue';
 
 // --- PROPS ---
 // Updated props to receive a paginated structure and filters
@@ -82,11 +81,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
   <AppLayout :breadcrumbs="breadcrumbs">
 
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <h3
-        class="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0 flex items-center">
-        <Package class="h-6 w-6 mr-2 text-indigo-600" />
-        Products Catalog
-      </h3>
+      <PageHeader title="Products Catalog" :icon="Package"></PageHeader>
 
       <!-- Search and Add new bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">

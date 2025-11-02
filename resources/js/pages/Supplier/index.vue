@@ -5,7 +5,7 @@ import { dashboard } from '@/routes';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Truck, Search } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Factory } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import necessary shadcn-vue components
@@ -21,6 +21,7 @@ import Input from '@/components/ui/input/Input.vue';
 import { Link } from '@inertiajs/vue3' // Import Link for pagination
 
 import { BreadcrumbItem, Supplier, type InertiaLink } from '@/types';
+import PageHeader from '@/components/PageHeader.vue';
 
 
 // --- PROPS ---
@@ -82,11 +83,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
   <AppLayout :breadcrumbs="breadcrumbs">
 
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <h3
-        class="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0 flex items-center">
-        <Truck class="h-6 w-6 mr-2 text-indigo-600" />
-        Suppliers List
-      </h3>
+      <PageHeader title="Suppliers list" :icon="Factory"></PageHeader>
 
       <!-- Search and Add new bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -104,8 +101,9 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
         <div v-if="props.suppliers.data.length > 0"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Card v-for="supplier in props.suppliers.data" :key="supplier.id" class="flex flex-col justify-between">
-            <CardHeader>
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle class="text-lg">{{ supplier.name }}</CardTitle>
+              <Factory class="h-6 w-6 text-foreground" />
             </CardHeader>
 
             <CardContent class="text-sm space-y-1">
