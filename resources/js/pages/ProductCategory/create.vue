@@ -73,7 +73,7 @@ const handleError = (errors: Record<string, string>) => {
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
     href: dashboard().url,
   },
   {
@@ -99,10 +99,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         <CardHeader>
           <CardTitle class="flex items-center text-2xl font-bold">
             <Tag class="w-6 h-6 mr-3" />
-            {{ isEdit ? 'Edit Product Category' : 'Create New Product Category' }}
+            {{ isEdit ? 'Modification catégorie' : 'Nouvelle catégorie' }}
           </CardTitle>
           <CardDescription>
-            Use a clear, descriptive name for organizing products.
+            Utilisez un nom clair et descriptif pour organiser vos produits.
           </CardDescription>
         </CardHeader>
 
@@ -111,7 +111,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
             <!-- Category Name Input -->
             <div class="grid gap-2">
-              <Label for="name">Category Name <span class="text-red-500">*</span></Label>
+              <Label for="name">Nom <span class="text-red-500">*</span></Label>
               <Input id="name" type="text" v-model="form.name" required autofocus :disabled="form.processing"
                 :class="{ 'border-red-500': form.errors.name }" placeholder="e.g., Electronics, Beverages, Software" />
               <InputError :message="form.errors.name" />
@@ -120,7 +120,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <!-- Submit Button -->
             <Button type="submit" class="w-full h-10 text-lg" :disabled="form.processing">
               <LoaderCircle v-if="form.processing" class="h-5 w-5 animate-spin mr-2" />
-              {{ isEdit ? 'Update Category' : 'Create Category' }}
+              {{ isEdit ? 'Enregistrer' : 'Créer catégorie' }}
             </Button>
           </form>
         </CardContent>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create, store, update } from '@/routes/client';
+import { create, index, store, update } from '@/routes/client';
 import { dashboard } from '@/routes';
 import { Client, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -31,11 +31,15 @@ const handleError = () => {
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
     href: dashboard().url,
   },
   {
-    title: 'Create client',
+    title: 'Clients',
+    href: index().url,
+  },
+  {
+    title: 'Formulaire client',
     href: create().url,
   },
 ];
@@ -43,23 +47,23 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 <template>
 
-  <Head title="Create client" />
+  <Head title="Créer un client" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <Card>
         <CardHeader>
-          <CardTitle> Create client</CardTitle>
-          <CardDescription>Designation and contact</CardDescription>
+          <CardTitle> Créer un client</CardTitle>
+          <CardDescription>Désignation et contact</CardDescription>
         </CardHeader>
         <CardContent>
           <Form v-bind="client?.id ? update.form(client.id) : store.form()" :reset-on-success="['name', 'ice']"
             @error="handleError" v-slot="{ errors, processing }" class="flex flex-col gap-6">
             <div class="grid gap-6">
               <div class="grid gap-2">
-                <Label for="name">Name</Label>
+                <Label for="name">Nom</Label>
                 <Input id="name" type="text" required autofocus :tabindex="1" autocomplete="name" name="name"
-                  placeholder="Client name" :model-value="client?.name" />
+                  placeholder="Nom Client" :model-value="client?.name" />
                 <InputError :message="errors.name" />
               </div>
 
@@ -73,7 +77,7 @@ const breadcrumbs: BreadcrumbItem[] = [
               <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="processing"
                 data-test="register-user-button">
                 <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                Save
+                Enregistrer
               </Button>
             </div>
           </Form>

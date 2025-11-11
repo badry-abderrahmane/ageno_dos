@@ -6,7 +6,7 @@ import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
 // Import new icons and utilities
-import { Pencil, Trash, Search, Download, File, FileText } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Download, File, FileText, Plus } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -24,6 +24,7 @@ import Input from '@/components/ui/input/Input.vue';
 import { Link } from '@inertiajs/vue3'
 import Badge from '@/components/ui/badge/Badge.vue';
 import PageHeader from '@/components/PageHeader.vue';
+import { dashboard } from '@/routes';
 
 // Extend the props to receive a paginated structure and filters
 const props = defineProps<{
@@ -39,7 +40,11 @@ const props = defineProps<{
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
+    href: dashboard().url,
+  },
+  {
+    title: 'Factures',
     href: index().url,
   },
 ];
@@ -73,15 +78,18 @@ const isActiveLink = (link: InertiaLink) => {
   <AppLayout :breadcrumbs="breadcrumbs">
 
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <PageHeader title="Invoices list" :icon="FileText"></PageHeader>
+      <PageHeader title="Factures" :icon="FileText"></PageHeader>
 
       <!-- Search and Add new bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="relative w-full max-w-sm">
-          <Input type="text" placeholder="Search invoices..." v-model="search" class="pl-10" />
+          <Input type="text" placeholder="Recherche..." v-model="search" class="pl-10" />
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
-        <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create())">Add new</Button>
+        <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create())">
+          <Plus></Plus>
+          Ajouter
+        </Button>
       </div>
 
       <!-- Main content area -->
@@ -95,10 +103,10 @@ const isActiveLink = (link: InertiaLink) => {
               <CardTitle>{{ invoice.client.name }}</CardTitle>
               <CardDescription>
                 <Badge v-if="invoice.status === 'paid'" variant="success">
-                  {{ invoice.status.toUpperCase() }}
+                  {{ 'Payé' }}
                 </Badge>
                 <Badge v-else variant="destructive">
-                  {{ invoice.status.toUpperCase() }}
+                  {{ 'Non payé' }}
                 </Badge>
               </CardDescription>
               <p class="text-lg text-gray-600 font-mono font-semibold italic text-right pt-2">{{ invoice.total }} DH</p>

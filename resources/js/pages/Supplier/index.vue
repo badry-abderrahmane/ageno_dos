@@ -5,7 +5,7 @@ import { dashboard } from '@/routes';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Search, Factory } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Factory, Plus } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import necessary shadcn-vue components
@@ -41,11 +41,11 @@ const props = defineProps<{
 // --- LOGIC ---
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
     href: dashboard().url,
   },
   {
-    title: 'Suppliers List',
+    title: 'Fournisseurs',
     href: index().url,
   },
 ];
@@ -83,15 +83,17 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
   <AppLayout :breadcrumbs="breadcrumbs">
 
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <PageHeader title="Suppliers list" :icon="Factory"></PageHeader>
+      <PageHeader title="Fournisseurs" :icon="Factory"></PageHeader>
 
       <!-- Search and Add new bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="relative w-full max-w-sm">
-          <Input type="text" placeholder="Search suppliers..." v-model="search" class="pl-10" />
+          <Input type="text" placeholder="Recherche..." v-model="search" class="pl-10" />
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
-        <Button class="w-full sm:w-auto sm:max-w-40" @click="goToCreate">Add new Supplier</Button>
+        <Button class="w-full sm:w-auto sm:max-w-40" @click="goToCreate">
+          <Plus /> Ajouter
+        </Button>
       </div>
 
 

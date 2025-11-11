@@ -38,10 +38,9 @@ defineProps<{
         preserveScroll: true,
       }" class="space-y-6" v-slot="{ errors, processing, reset, clearErrors }">
         <DialogHeader class="space-y-3">
-          <DialogTitle>Are you sure you want to delete this {{ resource }}?</DialogTitle>
+          <DialogTitle>Ëtes vous sûr de vouloir supprimer {{ resource }}?</DialogTitle>
           <DialogDescription>
-            Once {{ resource }} is deleted, all of its data will also be permanently
-            deleted.
+            Un fois {{ resource }} est supprimé, Toutes les données qui sont liées seront supprimés.
             <InputError v-if="errors" :message="errors.password" />
           </DialogDescription>
         </DialogHeader>
@@ -54,12 +53,12 @@ defineProps<{
                 reset();
               }
             ">
-              Cancel
+              Annuler
             </Button>
           </DialogClose>
 
           <Button type="submit" variant="destructive" :disabled="processing" data-test="confirm-delete-user-button">
-            Delete {{ resource }}
+            Supprimer {{ resource }}
           </Button>
         </DialogFooter>
       </Form>

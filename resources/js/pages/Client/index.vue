@@ -5,7 +5,7 @@ import { Client, type BreadcrumbItem, type InertiaLink } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Search, Briefcase } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Briefcase, Plus } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -20,6 +20,7 @@ import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import { Link } from '@inertiajs/vue3' // Import Link for pagination
 import PageHeader from '@/components/PageHeader.vue';
+import { dashboard } from '@/routes';
 
 // Extend the props to receive a paginated structure and filters
 const props = defineProps<{
@@ -35,7 +36,10 @@ const props = defineProps<{
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
+    href: dashboard().url,
+  }, {
+    title: 'Clients',
     href: index().url,
   },
 ];
@@ -70,13 +74,16 @@ const isActiveLink = (link: InertiaLink) => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <PageHeader title="Clients List" :icon="Briefcase"></PageHeader>
+      <PageHeader title="Clients" :icon="Briefcase"></PageHeader>
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="relative w-full max-w-sm">
-          <Input type="text" placeholder="Search clients..." v-model="search" class="pl-10" />
+          <Input type="text" placeholder="Recherche..." v-model="search" class="pl-10" />
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
-        <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create())">Add new</Button>
+        <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create())">
+          <Plus></Plus>
+          Ajouter
+        </Button>
       </div>
 
       <!-- Main content area -->

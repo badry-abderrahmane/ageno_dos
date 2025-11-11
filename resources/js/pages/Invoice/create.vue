@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { store, update, create } from '@/routes/invoice/index'
+import { store, update, create, index } from '@/routes/invoice/index'
 import apiRoutes from '@/routes/api/index'
 import { Plus, Trash, Package, FileText, LoaderCircle, Save } from 'lucide-vue-next';
 
@@ -139,14 +139,14 @@ const submit = () => {
     form.patch(update(props.invoice!.id).url, {
       onError: handleError,
       onSuccess: () => {
-        toast('Success', { description: 'Invoice updated successfully.' });
+        toast('Success', { description: 'Facture mis à jour avec succès.' });
       }
     });
   } else {
     form.post(store().url, {
       onError: handleError,
       onSuccess: () => {
-        toast('Success', { description: 'Invoice created successfully.' });
+        toast('Success', { description: 'Facture crée avec succès.' });
         form.reset('client_id', 'status');
         form.line_items = [{ product_id: null, qty: 1, price: 0 }]; // Reset line items cleanly
       }
@@ -156,19 +156,23 @@ const submit = () => {
 
 const handleError = (errors: Record<string, string>) => {
   console.error('Validation errors:', errors);
-  toast('Error creating/updating invoice', {
-    description: 'Please check the form for errors.',
+  toast('Error Facture', {
+    description: 'SVP Vérifier le formulaire',
   })
 }
 
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
     href: dashboard().url,
   },
   {
-    title: isEdit ? 'Edit Invoice' : 'Create Invoice',
+    title: 'Factures',
+    href: index().url,
+  },
+  {
+    title: isEdit ? 'Enregistrer' : 'Créer Facture',
     href: isEdit ? update(props.invoice!.id).url : create().url,
   },
 ];
@@ -176,7 +180,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 <template>
 
-  <Head :title="isEdit ? 'Edit Invoice' : 'Create Invoice'" />
+  <Head :title="isEdit ? 'Edition Facture' : 'Creation Facture'" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-2 md:p-4 pb-16">
@@ -186,10 +190,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         <CardHeader>
           <CardTitle class="flex items-center text-2xl font-bold ">
             <FileText class="w-6 h-6 mr-3" />
-            {{ isEdit ? 'Edit Invoice' : 'Create New Invoice' }}
+            {{ isEdit ? 'Edition Facture' : 'Creation Facture' }}
           </CardTitle>
           <CardDescription>
-            Configure invoice details and line items.
+            Configurer les informations facture.
           </CardDescription>
         </CardHeader>
 
@@ -204,7 +208,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <VirtualSelect label="Client" placeholder="Select a client" :fetch-url="apiRoutes.clients().url"
                   v-model:model-value="form.client_id" id="client_id" :error="form.errors.client_id"
                   :disabled="form.processing" />
-                <InputError :message="form.errors.client_id" />
+                <!-- <InputError :message="form.errors.client_id" /> -->
               </div>
 
               <!-- Status Select -->
@@ -217,8 +221,8 @@ const breadcrumbs: BreadcrumbItem[] = [
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="not_paid"> Not Paid </SelectItem>
-                      <SelectItem value="paid"> Paid </SelectItem>
+                      <SelectItem value="not_paid"> Non payé </SelectItem>
+                      <SelectItem value="paid"> Payé </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -231,7 +235,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <!-- --- SECTION 2: DYNAMIC LINE ITEMS --- -->
             <h3 class="text-xl font-semibold flex items-center">
               <Package class="w-5 h-5 mr-2 " />
-              Products & Services
+              Produits & Services
             </h3>
 
             <!-- Line Item Loop: Now uses consistent Card styling for all devices -->
@@ -241,7 +245,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                 <!-- Product Select -->
                 <div class="grid gap-2 col-span-12 md:col-span-5">
-                  <VirtualSelect :label="`Product ${index + 1}`" placeholder="Select a product"
+                  <VirtualSelect :label="`Produit - ${index + 1}`" placeholder="Select a product"
                     :fetch-url="apiRoutes.products().url" v-model:model-value="item.product_id" :id="`product_${index}`"
                     @update:model-value="updateItemPrice(index)" :error="form.errors[`line_items.${index}.product_id`]"
                     :disabled="form.processing" />
@@ -249,7 +253,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                 <!-- Unit Price Input -->
                 <div class="grid gap-2 col-span-6 md:col-span-2">
-                  <Label :for="`price_${index}`" class="text-sm font-semibold">Unit Price</Label>
+                  <Label :for="`price_${index}`" class="text-sm font-semibold">Prix unitaire</Label>
                   <Input :id="`price_${index}`" type="number" v-model.number="item.price" step="0.01" min="0" required
                     :disabled="form.processing" :class="{ 'border-red-500': form.errors[`line_items.${index}.price`] }"
                     class="text-right" />
@@ -258,7 +262,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                 <!-- Quantity Input -->
                 <div class="grid gap-2 col-span-6 md:col-span-2">
-                  <Label :for="`qty_${index}`" class="text-sm font-semibold">Qty</Label>
+                  <Label :for="`qty_${index}`" class="text-sm font-semibold">Quantité</Label>
                   <Input :id="`qty_${index}`" type="number" v-model.number="item.qty" min="1" required
                     :disabled="form.processing" :class="{ 'border-red-500': form.errors[`line_items.${index}.qty`] }"
                     class="text-right" />
@@ -268,7 +272,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <!-- Line Subtotal & Delete (Combined) -->
                 <div class="col-span-12 md:col-span-3 flex justify-between items-center h-full pt-6 md:pt-0">
                   <div class="flex flex-col w-full">
-                    <span class="text-xs font-medium text-gray-500 md:hidden">Line Total:</span>
+                    <span class="text-xs font-medium text-gray-500 md:hidden">Total:</span>
                     <span class="text-lg italic font-mono font-bold md:text-right w-full">
                       {{ itemSubtotal(item).toFixed(2) }}
                     </span>
@@ -285,7 +289,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <div class="flex justify-start">
               <Button type="button" variant="outline" @click="addLineItem" :disabled="form.processing" class="">
                 <Plus class="w-4 h-4 mr-2" />
-                Add Product Line
+                Ajouter un produit
               </Button>
             </div>
 
@@ -307,7 +311,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                   :disabled="form.processing">
                   <LoaderCircle v-if="form.processing" class="h-5 w-5 animate-spin mr-2" />
                   <Save v-else />
-                  <span class="hidden md:block">{{ isEdit ? 'Save' : 'Create Invoice' }}</span>
+                  <span class="hidden md:block">{{ isEdit ? 'Enregistrer' : 'Créer facture' }}</span>
                 </Button>
               </div>
             </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { store, create, update } from '@/routes/product/index';
+import { store, create, update, index } from '@/routes/product/index';
 import { dashboard } from '@/routes';
 import apiRoutes from '@/routes/api/index';
 import { Head, useForm } from '@inertiajs/vue3';
@@ -93,8 +93,12 @@ const submit = () => {
 // --- BREADCRUMBS ---
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Tableau de bord',
     href: dashboard().url,
+  },
+  {
+    title: 'Produits',
+    href: index().url,
   },
   {
     title: isEdit ? 'Edit Product' : 'Create Product',
@@ -106,25 +110,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 <template>
 
-  <Head :title="isEdit ? 'Edit Product' : 'Create Product'" />
+  <Head :title="isEdit ? 'Editer Produit' : 'Créer Produit'" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <Card>
         <CardHeader>
-          <CardTitle> {{ isEdit ? 'Edit Product' : 'Create New Product' }}</CardTitle>
-          <CardDescription>Identification, pricing, and vendor details.</CardDescription>
+          <CardTitle> {{ isEdit ? 'Editer Produit' : 'Nouveau Produit' }}</CardTitle>
+          <CardDescription>Identification, prix, et fournisseur.</CardDescription>
         </CardHeader>
         <CardContent>
           <form @submit.prevent="submit" class="flex flex-col gap-6">
 
             <!-- --- Section 1: Core Product Details --- -->
-            <h3 class="text-lg font-semibold border-b pb-1">
-              Product Identification
-            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="grid gap-2">
-                <Label for="name">Name <span class="text-red-500">*</span></Label>
+                <Label for="name">Nom <span class="text-red-500">*</span></Label>
                 <Input id="name" type="text" required autofocus :tabindex="1" autocomplete="off" name="name"
                   placeholder="Ultra-Max Sensor V2" v-model="form.name" :disabled="form.processing"
                   :class="{ 'border-red-500': form.errors.name }" />
@@ -133,46 +134,41 @@ const breadcrumbs: BreadcrumbItem[] = [
             </div>
 
             <!-- --- Section 2: Relationships (Dropdowns) --- -->
-            <h3 class="text-lg font-semibold border-b pb-1 pt-2">
-              Category & Vendor
-            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Product Category Select -->
               <div class="grid gap-2">
-                <Label for="product_category_id">Product Category <span class="text-red-500">*</span></Label>
-                <VirtualSelect label="Category" placeholder="Select a category"
+                <!-- <Label for="product_category_id">Catégorie <span class="text-red-500">*</span></Label> -->
+                <VirtualSelect label="Catégorie" placeholder="Select a category"
                   :fetch-url="apiRoutes.productCategories().url" v-model="form.product_category_id"
                   :error="form.errors.product_category_id" :disabled="form.processing" />
-                <InputError :message="form.errors.product_category_id" />
+                <!-- <InputError :message="form.errors.product_category_id" /> -->
               </div>
 
               <!-- Supplier Select -->
               <div class="grid gap-2">
-                <Label for="supplier_id">Supplier <span class="text-red-500">*</span></Label>
-                <VirtualSelect label="Supplier" placeholder="Select a supplier" :fetch-url="apiRoutes.suppliers().url"
-                  v-model="form.supplier_id" :error="form.errors.supplier_id" :disabled="form.processing" />
-                <InputError :message="form.errors.supplier_id" />
+                <!-- <Label for="supplier_id">Fournisseur <span class="text-red-500">*</span></Label> -->
+                <VirtualSelect label="Fournisseur" placeholder="Select a supplier"
+                  :fetch-url="apiRoutes.suppliers().url" v-model="form.supplier_id" :error="form.errors.supplier_id"
+                  :disabled="form.processing" />
+                <!-- <InputError :message="form.errors.supplier_id" /> -->
               </div>
             </div>
 
             <div class="w-30">
               <Button variant="outline" size="sm" class="text-sm text-gray-600 " v-if="!showStockInputs"
-                @click="showStockInputs = true">Show
-                extra fileds</Button>
+                @click="showStockInputs = true">Champs avancés</Button>
               <Button variant="outline" size="sm" class="text-sm text-gray-600 " v-else
-                @click="showStockInputs = false">Hide
-                extra fileds</Button>
+                @click="showStockInputs = false">Cacher Champs avancés</Button>
             </div>
 
             <template v-if="showStockInputs">
               <!-- --- Section 3: Pricing and Logistics --- -->
               <h3 class="text-lg font-semibold border-b pb-1 pt-2">
-                Pricing & Stock
-
+                Prix & Stock
               </h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="grid gap-2">
-                  <Label for="supplier_price">Supplier Price</Label>
+                  <Label for="supplier_price">Prix fournisseur</Label>
                   <Input id="supplier_price" type="number" step="0.01" min="0" :tabindex="5" name="supplier_price"
                     placeholder="0.00" v-model="form.supplier_price" :disabled="form.processing"
                     :class="{ 'border-red-500': form.errors.supplier_price }" />
@@ -180,7 +176,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </div>
 
                 <div class="grid gap-2">
-                  <Label for="price">Selling Price </Label>
+                  <Label for="price">Prix de vente</Label>
                   <Input id="price" type="number" step="0.01" min="0" required :tabindex="6" name="price"
                     placeholder="0.00" v-model="form.price" :disabled="form.processing"
                     :class="{ 'border-red-500': form.errors.price }" />
@@ -188,7 +184,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </div>
 
                 <div class="grid gap-2">
-                  <Label for="min_qty">Min Order Qty</Label>
+                  <Label for="min_qty">Min Qté</Label>
                   <Input id="min_qty" type="number" min="0" :tabindex="7" name="min_qty" placeholder="0"
                     v-model="form.min_qty" :disabled="form.processing"
                     :class="{ 'border-red-500': form.errors.min_qty }" />
@@ -196,7 +192,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </div>
 
                 <div class="grid gap-2">
-                  <Label for="max_qty">Max Order Qty</Label>
+                  <Label for="max_qty">Max Qté</Label>
                   <Input id="max_qty" type="number" min="0" :tabindex="8" name="max_qty" placeholder="0"
                     v-model="form.max_qty" :disabled="form.processing"
                     :class="{ 'border-red-500': form.errors.max_qty }" />
@@ -206,13 +202,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="grid gap-2">
-                  <Label for="img">Image URL/Path</Label>
+                  <Label for="img">Image</Label>
                   <Input id="img" type="text" :tabindex="9" name="img" placeholder="/images/sensor_v2.jpg"
                     v-model="form.img" :disabled="form.processing" :class="{ 'border-red-500': form.errors.img }" />
                   <InputError :message="form.errors.img" />
                 </div>
                 <div class="grid gap-2">
-                  <Label for="delivery_time">Delivery Time (Days)</Label>
+                  <Label for="delivery_time">Livraison (jours)</Label>
                   <Input id="delivery_time" type="number" min="0" :tabindex="10" name="delivery_time" placeholder="0"
                     v-model="form.delivery_time" :disabled="form.processing"
                     :class="{ 'border-red-500': form.errors.delivery_time }" />
@@ -222,10 +218,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
               <!-- --- Section 4: Notes --- -->
               <h3 class="text-lg font-semibold border-b pb-1 pt-2">
-                Additional Information
+                Informations Complémentaires
               </h3>
               <div class="grid gap-2">
-                <Label for="note">Product Note/Description</Label>
+                <Label for="note">Note</Label>
                 <textarea id="note" rows="3"
                   class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm"
                   v-model="form.note" placeholder="Any internal notes or detailed description..." :tabindex="11"
@@ -237,7 +233,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
             <Button type="submit" class="mt-2 w-full" tabindex="12" :disabled="form.processing">
               <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin mr-2" />
-              {{ isEdit ? 'Update Product' : 'Create Product' }}
+              {{ isEdit ? 'Enregistrer' : 'Ajouter' }}
             </Button>
           </form>
         </CardContent>

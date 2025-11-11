@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input/Input.vue';
 import { Link } from '@inertiajs/vue3' // Import Link for pagination
 import PageHeader from '@/components/PageHeader.vue';
+import { dashboard } from '@/routes';
 
 
 // --- PROPS ---
@@ -36,11 +37,11 @@ const props = defineProps<{
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
-    href: '/', // Assuming dashboard route is root
+    title: 'Tableau de bord',
+    href: dashboard.url(), // Assuming dashboard route is root
   },
   {
-    title: 'Product Categories',
+    title: 'Catégories',
     href: index().url,
   },
 ];
@@ -69,7 +70,7 @@ const isActiveLink = (link: InertiaLink) => {
 
 <template>
 
-  <Head title="Product Categories" />
+  <Head title="Catégories" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
 
@@ -79,10 +80,13 @@ const isActiveLink = (link: InertiaLink) => {
       <!-- Search and Add new bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
         <div class="relative w-full max-w-sm">
-          <Input type="text" placeholder="Search categories by name..." v-model="search" class="pl-10" />
+          <Input type="text" placeholder="Recherche..." v-model="search" class="pl-10" />
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
-        <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create().url)">Add new Category</Button>
+        <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create().url)">
+          <Plus></Plus>
+          Ajouter
+        </Button>
       </div>
 
       <!-- Category Grid -->
@@ -121,7 +125,7 @@ const isActiveLink = (link: InertiaLink) => {
           <p class="text-gray-500 mb-6">Start by adding your first product category.</p>
           <Button class="h-10 px-6 bg-emerald-600 hover:bg-emerald-700" @click="router.visit(create().url)">
             <Plus class="w-5 h-5 mr-2" />
-            Add New Category
+            Ajouter
           </Button>
         </div>
 

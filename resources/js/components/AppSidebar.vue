@@ -24,7 +24,7 @@ import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Tableau de bord',
         href: dashboard(),
         icon: LayoutGrid,
     },
@@ -34,22 +34,22 @@ const mainNavItems: NavItem[] = [
         icon: Briefcase,
     },
     {
-        title: 'Invoices',
+        title: 'Factures',
         href: invoice.index(),
         icon: FileText,
     },
     {
-        title: 'Suppliers',
+        title: 'Fournisseurs',
         href: supplier.index(),
         icon: Factory
     },
     {
-        title: 'Products',
+        title: 'Produits',
         href: product.index(),
         icon: Package
     },
     {
-        title: 'Product categories',
+        title: 'Catégories',
         href: productCategory.index(),
         icon: Boxes
     }
