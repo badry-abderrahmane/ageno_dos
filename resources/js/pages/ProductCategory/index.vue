@@ -73,11 +73,11 @@ const isActiveLink = (link: InertiaLink) => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
 
-    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-2 md:p-4">
+    <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-2 md:p-4">
       <PageHeader title="Categories" :icon="Boxes"></PageHeader>
 
       <!-- Search and Add new bar -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
         <div class="relative w-full max-w-sm">
           <Input type="text" placeholder="Search categories by name..." v-model="search" class="pl-10" />
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

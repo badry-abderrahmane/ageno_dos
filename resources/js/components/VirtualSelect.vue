@@ -102,7 +102,7 @@ onMounted(async () => {
       <ComboboxAnchor class="w-auto">
         <ComboboxTrigger as-child>
           <div class="relative w-full items-center">
-            <ComboboxInput v-model="search" class="pl-9" :display-value="(val) => val?.name ?? ''"
+            <ComboboxInput v-model="search" class="pl-9 pr-8 truncate" :display-value="(val) => val?.name ?? ''"
               placeholder="Select product..." />
             <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
               <Search class="size-4 text-muted-foreground" />
@@ -126,7 +126,7 @@ onMounted(async () => {
           </div>
         </ComboboxEmpty>
         <ComboboxGroup class="max-h-50 overflow-y-auto">
-          <ComboboxItem v-for="item in items" :key="item.name" :value="item">
+          <ComboboxItem v-for="item in items" :key="item.name" :value="item" class="border-b">
             {{ item.name }}
             <ComboboxItemIndicator>
               <Check class="ml-auto size-4" />

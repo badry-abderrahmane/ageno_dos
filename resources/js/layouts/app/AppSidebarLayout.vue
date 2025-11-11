@@ -19,7 +19,9 @@ withDefaults(defineProps<Props>(), {
         <AppSidebar />
         <AppContent variant="sidebar" class="overflow-x-hidden">
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
-            <slot />
+            <div class="max-h-[] overflow-y-scroll" style="max-height: calc(100dvh - 64px);">
+                <slot />
+            </div>
         </AppContent>
     </AppShell>
 </template>

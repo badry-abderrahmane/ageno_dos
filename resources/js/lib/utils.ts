@@ -16,3 +16,10 @@ export function urlIsActive(
 export function toUrl(href: NonNullable<InertiaLinkProps['href']>) {
     return typeof href === 'string' ? href : href?.url;
 }
+
+export function toMoney(amount: number) {
+    return  new Intl.NumberFormat('fr', {
+        style: 'currency',
+        currency: 'MAD'
+    }).format(amount)
+}

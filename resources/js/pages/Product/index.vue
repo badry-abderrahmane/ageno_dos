@@ -21,6 +21,7 @@ import { Link } from '@inertiajs/vue3' // Import Link for pagination
 
 import { BreadcrumbItem, Product, type InertiaLink } from '@/types';
 import PageHeader from '@/components/PageHeader.vue';
+import { toMoney } from '@/lib/utils';
 
 // --- PROPS ---
 // Updated props to receive a paginated structure and filters
@@ -100,8 +101,6 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
         <div v-if="props.products.data.length > 0"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Card v-for="product in props.products.data" :key="product.id" class="flex flex-col justify-between">
-
-
             <CardContent class="text-sm space-y-2">
               <CardTitle class="text-md">{{ product.name }}</CardTitle>
               <p class="flex items-center text-muted-foreground">
@@ -112,13 +111,13 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
                 <Factory class="h-4 w-4 mr-2" />
                 Supplier: <span class="ml-1 font-medium text-foreground">{{ product.supplier.name }}</span>
               </p>
-              <p v-if="product.price" class="flex items-center text-2xl font-bold text-green-600 pt-2">
-                <DollarSign class="h-5 w-5 mr-1" />
-                {{ product.price }}
-              </p>
             </CardContent>
 
-            <CardFooter class="flex justify-end gap-2">
+            <CardFooter class="flex justify-end items-center gap-2">
+              <p v-if="product.price" class="mr-auto flex items-center text-lg font-bold text-green-600 pt-2">
+                {{ toMoney(+product.price) }}
+              </p>
+
               <Button variant="outline" size="icon" @click="goToEdit(product.id)">
                 <Pencil class="h-4 w-4" />
               </Button>

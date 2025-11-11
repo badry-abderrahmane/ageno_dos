@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { store, update, create } from '@/routes/invoice/index'
 import apiRoutes from '@/routes/api/index'
-import { Plus, Trash, DollarSign, Package, FileText, LoaderCircle } from 'lucide-vue-next';
+import { Plus, Trash, Package, FileText, LoaderCircle, Save } from 'lucide-vue-next';
 
 // --- ASSUMED INERTIA/PROJECT IMPORTS ---
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -34,6 +34,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Client, Product } from '@/types';
 import VirtualSelect from '@/components/VirtualSelect.vue';
+import { toMoney } from '@/lib/utils';
 
 
 interface InvoiceLineItem {
@@ -178,7 +179,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head :title="isEdit ? 'Edit Invoice' : 'Create Invoice'" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-2 md:p-4">
+    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-2 md:p-4 pb-16">
 
       <!-- Main Card -->
       <Card class="shadow-none">
@@ -268,13 +269,13 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div class="col-span-12 md:col-span-3 flex justify-between items-center h-full pt-6 md:pt-0">
                   <div class="flex flex-col w-full">
                     <span class="text-xs font-medium text-gray-500 md:hidden">Line Total:</span>
-                    <span class="text-lg font-bold md:text-right w-full">
-                      ${{ itemSubtotal(item).toFixed(2) }}
+                    <span class="text-lg italic font-mono font-bold md:text-right w-full">
+                      {{ itemSubtotal(item).toFixed(2) }}
                     </span>
                   </div>
                   <Button type="button" @click="removeLineItem(index)" variant="ghost"
                     class="p-2 h-auto text-red-500 hover:text-red-700 shrink-0 ml-4 md:ml-2">
-                    <Trash class="w-5 h-5" />
+                    <Trash class="w-10 h-10" />
                   </Button>
                 </div>
               </div>
@@ -291,19 +292,22 @@ const breadcrumbs: BreadcrumbItem[] = [
             <Separator class="bg-gray-200 mt-6" />
 
             <!-- --- SECTION 3: TOTALS AND SUBMIT --- -->
-            <div class="flex justify-end">
-              <div class="w-full md:w-1/3 space-y-4 p-4 rounded-lg border">
-                <div class="flex justify-between items-center text-xl font-bold">
-                  <span>Grand Total:</span>
-                  <span class="flex items-center text-2xl">
-                    <DollarSign class="w-5 h-5 mr-1" />
-                    {{ grandTotal.toFixed(2) }}
+            <div class="fixed bottom-0 left-0 md:static bg-foreground md:bg-background w-full flex justify-end">
+              <div class="w-full md:w-1/2 flex justify-between items-center md:space-y-4 p-4 rounded-lg md:border">
+                <div class="flex flex-col justify-end text-right font-bold">
+                  <span class="flex items-center text-gray-400 font-mono">
+                    TTC {{ toMoney(grandTotal + (grandTotal * 0.2)) }}
+                  </span>
+                  <span class="flex items-center text-2xl text-background md:text-foreground font-mono">
+                    {{ toMoney(grandTotal) }}
                   </span>
                 </div>
 
-                <Button type="submit" class="w-full h-10 text-lg" :disabled="form.processing">
+                <Button type="submit" variant="secondary" class="ml-2 md:ml-0 text-lg w-1/3 md:w-1/2"
+                  :disabled="form.processing">
                   <LoaderCircle v-if="form.processing" class="h-5 w-5 animate-spin mr-2" />
-                  {{ isEdit ? 'Update Invoice' : 'Create Invoice' }}
+                  <Save v-else />
+                  <span class="hidden md:block">{{ isEdit ? 'Save' : 'Create Invoice' }}</span>
                 </Button>
               </div>
             </div>
