@@ -186,8 +186,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-2 md:p-4 pb-16">
 
       <!-- Main Card -->
-      <Card class="shadow-none">
-        <CardHeader>
+      <Card class="shadow-none md:border">
+        <CardHeader class="px-3 md:px-6">
           <CardTitle class="flex items-center text-2xl font-bold ">
             <FileText class="w-6 h-6 mr-3" />
             {{ isEdit ? 'Edition Facture' : 'Creation Facture' }}
@@ -197,7 +197,7 @@ const breadcrumbs: BreadcrumbItem[] = [
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
+        <CardContent class="px-3 md:px-6">
           <form @submit.prevent="submit" class="flex flex-col gap-8">
 
             <!-- --- SECTION 1: HEADER DETAILS --- -->

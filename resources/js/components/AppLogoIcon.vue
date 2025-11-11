@@ -14,5 +14,5 @@ defineProps<Props>();
 </script>
 
 <template>
-    <Flame></Flame>
+    <Flame class="size-5 fill-current text-white dark:text-black"></Flame>
 </template>

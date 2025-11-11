@@ -22,6 +22,7 @@ class InvoiceController extends Controller
 
         $invoices = Invoice::with('client')
             // 2. Apply search filter if present
+            ->where('user_id', Auth::user()->id)
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     // Search by Invoice fields (e.g., status or total)
@@ -110,6 +111,9 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
+        if (Auth::user()->id != $invoice->user_id) {
+            abort(404);
+        }
         // Load products along with pivot data (qty, price) for the edit form
         $invoice->load(['products' => fn($q) => $q->withPivot('qty', 'price')]);
 
@@ -137,6 +141,10 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
+        if (Auth::user()->id != $invoice->user_id) {
+            abort(404);
+        }
+
         $validatedData = $request->validate([
             'client_id' => ['required', 'exists:clients,id'],
             'status' => ['required', 'string'],
@@ -177,8 +185,11 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        $invoice->delete();
+        if (Auth::user()->id != $invoice->user_id) {
+            abort(404);
+        }
 
+        $invoice->delete();
         return to_route('invoice.index');
     }
 
@@ -187,6 +198,10 @@ class InvoiceController extends Controller
      */
     public function downloadPdf(Request $request, Invoice $invoice, PdfInvoiceService $pdfService)
     {
+        if (Auth::user()->id != $invoice->user_id) {
+            abort(404);
+        }
+
         $type = $request->query('type');
         $pdfContent = $pdfService->download($invoice, $type);
         $filename = "{$type}-{$invoice->id}-" . date('Y') . ".pdf";

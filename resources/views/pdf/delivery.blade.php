@@ -38,9 +38,7 @@
 
         return strtoupper($blendedHex);
     }
-    // ========================
-    // COMPANY CONFIG VARIABLES
-    // ========================
+    //========================// COMPANY CONFIG VARIABLES
     $baseColor = $organization->org_color ? $organization->org_color : '#9E9E9E';
     $tintColor = hexToBlendedHex($baseColor, '0.2');
 @endphp
@@ -86,11 +84,11 @@
                 <img height="45" width="140" src="{{ $organization->org_logo }}" alt="">
                 <br />
             </td>
-            <td style="font-size: 17px; width: 220px;"><br>Facture N°
+            <td style="font-size: 17px; width: 220px;text-align: center;"><br>Bon de livraison <br>N°
                 {{ $invoice->id }}-{{ \Carbon\Carbon::parse($invoice->created_at)->format('Y') }}
             </td>
             <td>
-                <strong>Facture #ID:</strong>
+                <strong>BL #ID:</strong>
                 <br>
                 {{ strtoupper(uniqid()) }}-{{ $invoice->id }}
                 <br>
@@ -148,7 +146,8 @@
                         <td width="72" align="center">{{ $product->pivot->qty }}</td>
                         <td width="100" align="center">{{ number_format($product->pivot->price, 2, '.', ',') }}</td>
                         <td width="120" align="center">
-                            {{ number_format($product->pivot->qty * $product->pivot->price, 2, '.', ',') }}</td>
+                            {{ number_format($product->pivot->qty * $product->pivot->price, 2, '.', ',') }}
+                        </td>
                     </tr>
                 @endforeach
             @endforeach
@@ -157,13 +156,6 @@
 
     <br><br>
 
-    @if ($organization->org_modality)
-        <table cellspacing="0" cellpadding="5" border="1">
-            <tr>
-                <td width="532"><b>Modalités de paiement:</b><br>{{ $organization->org_modality }}</td>
-            </tr>
-        </table>
-    @endif
 
     <br> <br>
 
@@ -175,8 +167,7 @@
             $totalTTC = $totalHT + $tva;
         @endphp
         <tr>
-            <td width="242" style="border: 1px solid black;" rowspan="3"><b>Coordonnées
-                    bancaires:</b><br><br><i><u>Banque:</u>&nbsp;&nbsp;&nbsp;{{ $organization->org_bank }}</i></td>
+            <td width="242" rowspan="3"></td>
             <td width="20" align="center"><b></b></td>
             <td width="140" align="center"
                 style="border: 1px solid black;background-color: {{ $baseColor }};color: white;">
@@ -214,9 +205,7 @@
     <!-- CACHET -->
     <table cellspacing="0" cellpadding="5">
         <tr>
-            <td width="242" align="center" style="border: 1px solid black;"><b>Accord client <br> Proposition
-                    expirant le :</b><i>&nbsp;{{ \Carbon\Carbon::now()->addDays(29)->toDateString() }}</i><br>Mention
-                "Bon pour accord", date, signature</td>
+            <td width="242" align="center"></td>
             <td width="20" align="center"><b></b></td>
             <td width="270" style="border: 1px solid black;"><u><i>Remarques et
                         Cachet:<br /></i></u><br><br><br><br><br>*Cadre réservé à ne pas remplir avant la récéption.

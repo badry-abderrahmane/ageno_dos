@@ -24,7 +24,7 @@ const page = usePage();
                     :tooltip="item.title">
                     <Link :href="item.href">
                     <component :is="item.icon" class="text-xl" />
-                    <span>{{ item.title }}</span>
+                    <span class="bold">{{ item.title }}</span>
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>

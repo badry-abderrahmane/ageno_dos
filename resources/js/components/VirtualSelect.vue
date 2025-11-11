@@ -103,7 +103,7 @@ onMounted(async () => {
         <ComboboxTrigger as-child>
           <div class="relative w-full items-center">
             <ComboboxInput v-model="search" class="pl-9 pr-8 truncate" :display-value="(val) => val?.name ?? ''"
-              placeholder="Select product..." />
+              :placeholder="placeholder + ' ...'" />
             <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
               <Search class="size-4 text-muted-foreground" />
             </span>

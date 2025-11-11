@@ -13,15 +13,17 @@ class PdfInvoiceService
      */
     public function download(Invoice $invoice, $type)
     {
+        $filename = "{$type}-{$invoice->id}-" . date('Y') . ".pdf";
+
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAutoPageBreak(true, 25);
-        $pdf->SetAuthor('Nicola Asuni');
-        $pdf->SetTitle('TCPDF Example 003');
-        $pdf->SetSubject('TCPDF Tutorial');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->SetAuthor('Ageno - ' . $invoice->user->organization->name);
+        $pdf->SetTitle($filename);
+        $pdf->SetSubject($invoice->user->organization->name);
+        $pdf->SetKeywords($invoice->user->organization->name);
 
         // set default header data
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -41,8 +43,19 @@ class PdfInvoiceService
 
         $pdf->AddPage();
 
-        $view = $type === 'quote' ? 'pdf.quote' : 'pdf.invoice';
-        $filename = "{$type}-{$invoice->id}-" . date('Y') . ".pdf";
+        $view = 'pdf.quote';
+
+        switch ($type) {
+            case 'quote':
+                $view = 'pdf.quote';
+                break;
+            case 'delivery':
+                $view = 'pdf.delivery';
+                break;
+            case 'invoice':
+                $view = 'pdf.invoice';
+                break;
+        }
 
         $html = view($view, [
             'invoice' => $invoice,

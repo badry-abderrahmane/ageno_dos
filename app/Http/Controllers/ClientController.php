@@ -19,6 +19,7 @@ class ClientController extends Controller
 
         // Build the query
         $clients = Client::query()
+            ->where('user_id', Auth::user()->id)
             ->when($search, function ($query, $search) {
                 // Apply the search filter if a term is present
                 $query->where('name', 'like', "%{$search}%")
@@ -43,6 +44,7 @@ class ClientController extends Controller
         $filters = $request->only(['search']);
 
         $clients = Client::query()
+            ->where('user_id', Auth::user()->id)
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
@@ -85,6 +87,10 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+        if (Auth::user()->id != $client->user_id) {
+            abort(404);
+        }
+
         return response()->json([
             'id' => $client->id,
             'name' => $client->name,
@@ -96,6 +102,10 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
+        if (Auth::user()->id != $client->user_id) {
+            abort(404);
+        }
+
         return Inertia::render('Client/create', [
             'client' => $client
         ]);
@@ -106,6 +116,10 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        if (Auth::user()->id != $client->user_id) {
+            abort(404);
+        }
+
         $client->update($request->validate([
             'name' => ['required', 'max:250'],
             'ice' => ['required', 'min:15,max:15', 'digits:15'],
@@ -119,8 +133,11 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        $client->delete();
+        if (Auth::user()->id === $client->user_id) {
+            abort(404);
+        }
 
+        $client->delete();
         return to_route('client.index');
     }
 }

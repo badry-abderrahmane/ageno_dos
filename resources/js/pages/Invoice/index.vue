@@ -6,7 +6,7 @@ import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
 // Import new icons and utilities
-import { Pencil, Trash, Search, Download, File, FileText, Plus } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Download, File, FileText, Plus, Truck } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -118,6 +118,11 @@ const isActiveLink = (link: InertiaLink) => {
               <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'quote' } }).url">
                 <Button variant="outline" size="icon">
                   <File class="h-4 w-4" />
+                </Button>
+              </a>
+              <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'delivery' } }).url">
+                <Button variant="outline" size="icon">
+                  <Truck class="h-4 w-4" />
                 </Button>
               </a>
               <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'invoice' } }).url">
