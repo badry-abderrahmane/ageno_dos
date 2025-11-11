@@ -37,7 +37,7 @@ withDefaults(
                 <div class="flex items-center space-x-4">
                     <Link v-if="$page.props.auth.user" :href="dashboard()"
                         class="text-sm font-semibold hover:underline">Tableau de board</Link>
-                    <Link :href="login()" class="text-sm font-semibold hover:underline">Se connecter</Link>
+                    <Link v-else :href="login()" class="text-sm font-semibold hover:underline">Se connecter</Link>
                 </div>
             </div>
         </header>
