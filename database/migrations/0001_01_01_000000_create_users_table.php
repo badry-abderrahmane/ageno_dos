@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('org_footer')->nullable()->default('');
             $table->string('org_modality')->nullable()->default('');
             $table->string('org_bank')->nullable()->default('');
-            $table->string('org_logo')->nullable()->default('');
+            $table->text('org_logo')->nullable()->default('');
             $table->string('org_color')->nullable()->default('');
             $table->timestamps();
         });
