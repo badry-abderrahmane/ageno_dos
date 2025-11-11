@@ -139,7 +139,7 @@ const submit = () => {
     form.patch(update(props.invoice!.id).url, {
       onError: handleError,
       onSuccess: () => {
-        toast('Success', { description: 'Facture mis à jour avec succès.' });
+        toast('Success', { description: 'Facture mise à jour avec succès.' });
       }
     });
   } else {
