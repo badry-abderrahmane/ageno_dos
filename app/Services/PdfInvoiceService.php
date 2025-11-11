@@ -65,6 +65,6 @@ class PdfInvoiceService
 
         $pdf->writeHTML($html, true, false, true, false, '');
 
-        return $pdf->Output($filename, 'I');
+        return $pdf->Output($filename, 'S');
     }
 }
