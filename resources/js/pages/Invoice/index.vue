@@ -115,17 +115,17 @@ const isActiveLink = (link: InertiaLink) => {
               <Button variant="outline" size="icon" @click="router.visit(edit(invoice.id).url)">
                 <Pencil class="h-4 w-4" />
               </Button>
-              <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'quote' } }).url">
+              <a :href="download({ invoice: invoice.id }, { query: { type: 'quote' } }).url">
                 <Button variant="outline" size="icon">
                   <File class="h-4 w-4" />
                 </Button>
               </a>
-              <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'delivery' } }).url">
+              <a :href="download({ invoice: invoice.id }, { query: { type: 'delivery' } }).url">
                 <Button variant="outline" size="icon">
                   <Truck class="h-4 w-4" />
                 </Button>
               </a>
-              <a target="_blank" :href="download({ invoice: invoice.id }, { query: { type: 'invoice' } }).url">
+              <a :href="download({ invoice: invoice.id }, { query: { type: 'invoice' } }).url">
                 <Button variant="outline" size="icon">
                   <Download class="h-4 w-4" />
                 </Button>
