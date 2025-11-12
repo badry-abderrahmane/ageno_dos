@@ -22,7 +22,7 @@ class ProductCategoryController extends Controller
         $categories = ProductCategory::query()
             // Apply search filter if present
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where('name', 'like', '%' . $search . '%');
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
             // Sort by name for alphabetical display
             ->orderBy('name')
@@ -44,7 +44,7 @@ class ProductCategoryController extends Controller
 
         $categories = ProductCategory::query()
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
             ->orderBy('name')
             ->paginate(15)

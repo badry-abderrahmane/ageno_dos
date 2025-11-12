@@ -16,17 +16,12 @@ class ClientController extends Controller
     {
         // Get the search term from the request, default to null
         $search = $request->input('search');
-
         // Build the query
         $clients = Client::query()
             ->where('user_id', Auth::user()->id)
             ->when($search, function ($query, $search) {
-                // Apply the search filter if a term is present
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('ice', 'like', "%{$search}%"); // Add more columns as needed
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
-            // Paginate the results (e.g., 10 per page)
-            // ->withQueryString() is crucial to preserve the search filter when paginating
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -46,7 +41,7 @@ class ClientController extends Controller
         $clients = Client::query()
             ->where('user_id', Auth::user()->id)
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
             ->orderBy('name')
             ->paginate(15)
@@ -74,7 +69,7 @@ class ClientController extends Controller
     {
         $validatedData = $request->validate([
             'name' => ['required', 'max:250'],
-            'ice' => ['required', 'min:15,max:15', 'digits:15'],
+            'ice' => ['required', ''],
         ]);
         $data = array_merge($validatedData, ['user_id' => Auth::id()]);
         Client::create($data);
@@ -122,7 +117,7 @@ class ClientController extends Controller
 
         $client->update($request->validate([
             'name' => ['required', 'max:250'],
-            'ice' => ['required', 'min:15,max:15', 'digits:15'],
+            'ice' => ['required', ''],
         ]));
 
         return to_route('client.index');

@@ -24,15 +24,11 @@ class InvoiceController extends Controller
             // 2. Apply search filter if present
             ->where('user_id', Auth::user()->id)
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where(function ($query) use ($search) {
-                    // Search by Invoice fields (e.g., status or total)
-                    $query->where('status', 'like', '%' . $search . '%')
-                        ->orWhere('total', 'like', '%' . $search . '%');
-                })
-                    // Search in related Client name
-                    ->orWhereHas('client', function ($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    });
+                $query->whereRaw('LOWER(status) like ?', "%" . strtolower($search) . "%");
+                // Search in related Client name
+                $query->orWhereHas('client', function ($query) use ($search) {
+                    $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
+                });
             })
             // NOTE: I removed the original `where('status', 'not_paid')` to allow searching across all invoices.
             // If you need to filter the base list, add it back here.

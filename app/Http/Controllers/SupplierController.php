@@ -23,9 +23,7 @@ class SupplierController extends Controller
         $suppliers = Supplier::query()
             // Apply search filter if present
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%');
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
             // Sort by most recently created suppliers
             ->latest()
@@ -47,7 +45,7 @@ class SupplierController extends Controller
 
         $suppliers = Supplier::query()
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
             ->orderBy('name')
             ->paginate(15)

@@ -26,15 +26,15 @@ class ProductController extends Controller
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     // Search by product name 
-                    $query->where('name', 'like', '%' . $search . '%');
+                    $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
                 })
                     // Search in related Product Category name
                     ->orWhereHas('productCategory', function ($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
+                        $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
                     })
                     // Search in related Supplier name
                     ->orWhereHas('supplier', function ($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
+                        $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
                     });
             })
             // Sort by most recently created products
@@ -57,7 +57,7 @@ class ProductController extends Controller
 
         $products = Product::query()
             ->when($filters['search'] ?? null, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->whereRaw('LOWER(name) like ?', "%" . strtolower($search) . "%");
             })
             ->orderBy('name')
             ->paginate(20)
