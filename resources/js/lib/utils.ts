@@ -18,8 +18,9 @@ export function toUrl(href: NonNullable<InertiaLinkProps['href']>) {
 }
 
 export function toMoney(amount: number) {
-    return  new Intl.NumberFormat('fr', {
+    return  new Intl.NumberFormat('en', {
         style: 'currency',
-        currency: 'MAD'
+        currency: 'MAD',
+        trailingZeroDisplay: 'stripIfInteger'
     }).format(amount)
 }

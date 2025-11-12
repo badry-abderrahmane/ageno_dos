@@ -25,6 +25,7 @@ import { Link } from '@inertiajs/vue3'
 import Badge from '@/components/ui/badge/Badge.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { dashboard } from '@/routes';
+import { toMoney } from '@/lib/utils';
 
 // Extend the props to receive a paginated structure and filters
 const props = defineProps<{
@@ -109,7 +110,8 @@ const isActiveLink = (link: InertiaLink) => {
                   {{ 'Non payé' }}
                 </Badge>
               </CardDescription>
-              <p class="text-lg text-gray-600 font-mono font-semibold italic text-right pt-2">{{ invoice.total }} DH</p>
+              <p class="text-lg text-gray-600 font-mono font-semibold italic text-right pt-2">{{ toMoney(+invoice.total)
+                }}</p>
             </CardHeader>
             <CardFooter class="flex justify-end gap-2">
               <Button variant="outline" size="icon" @click="router.visit(edit(invoice.id).url)">
