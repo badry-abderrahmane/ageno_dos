@@ -196,6 +196,25 @@
             </td>
         </tr>
     </table>
+
+    <br><br>
+
+    <!-- CACHET -->
+    <table cellspacing="0" cellpadding="5">
+        <tr>
+            <td width="242" align="center" style="border: 1px solid black;">
+                <b>Accord client <br> Proposition
+                    expirant le :</b><i>&nbsp;{{ \Carbon\Carbon::now()->addDays(29)->toDateString() }}</i><br>Mention
+                "Bon pour accord", date, signature
+            </td>
+            <td width="20" align="center"><b></b></td>
+            <td width="270" style="border: 1px solid black;"><u><i>Remarques et
+                        Cachet:<br /></i></u><br><br><br><br><br>
+            </td>
+        </tr>
+
+    </table>
+    <br>
 </body>
 
 </html>

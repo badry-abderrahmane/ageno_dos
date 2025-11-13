@@ -175,8 +175,10 @@
             $totalTTC = $totalHT + $tva;
         @endphp
         <tr>
-            <td width="242" style="border: 1px solid black;" rowspan="3"><b>Coordonnées
-                    bancaires:</b><br><br><i><u>Banque:</u>&nbsp;&nbsp;&nbsp;{{ $organization->org_bank }}</i></td>
+            <td width="242" rowspan="3">
+                {{-- <b>Coordonnées
+                    bancaires:</b><br><br><i><u>Banque:</u>&nbsp;&nbsp;&nbsp;{{ $organization->org_bank }}</i> --}}
+            </td>
             <td width="20" align="center"><b></b></td>
             <td width="140" align="center"
                 style="border: 1px solid black;background-color: {{ $baseColor }};color: white;">
@@ -214,9 +216,11 @@
     <!-- CACHET -->
     <table cellspacing="0" cellpadding="5">
         <tr>
-            <td width="242" align="center" style="border: 1px solid black;"><b>Accord client <br> Proposition
+            <td width="242" align="center">
+                {{-- <b>Accord client <br> Proposition
                     expirant le :</b><i>&nbsp;{{ \Carbon\Carbon::now()->addDays(29)->toDateString() }}</i><br>Mention
-                "Bon pour accord", date, signature</td>
+                "Bon pour accord", date, signature --}}
+            </td>
             <td width="20" align="center"><b></b></td>
             <td width="270" style="border: 1px solid black;"><u><i>Remarques et
                         Cachet:<br /></i></u><br><br><br><br><br>*Cadre réservé à ne pas remplir avant la récéption.
