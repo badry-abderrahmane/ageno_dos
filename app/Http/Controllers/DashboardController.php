@@ -56,7 +56,7 @@ class DashboardController extends Controller
 
         $monthlyRevenue = Invoice::select(
             DB::raw("{$dateFormatFunction} as month_year"),
-            DB::raw('SUM(total) as revenue')
+            DB::raw('SUM(CAST(total AS NUMERIC)) as revenue')
         )
             ->where('created_at', '>=', $sixMonthsAgo)
             ->groupBy('month_year')
