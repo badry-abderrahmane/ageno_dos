@@ -21,6 +21,7 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { Package, Briefcase, LayoutGrid, FileText, Factory, Boxes } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import AppearanceTabs from './AppearanceTabs.vue';
 
 const mainNavItems: NavItem[] = [
     {
@@ -88,6 +89,7 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
+            <AppearanceTabs compact />
             <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>

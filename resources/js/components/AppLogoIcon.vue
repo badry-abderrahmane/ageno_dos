@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Flame } from 'lucide-vue-next';
+import { Leaf } from 'lucide-vue-next';
 import type { HTMLAttributes } from 'vue';
 
 defineOptions({
@@ -14,5 +14,5 @@ defineProps<Props>();
 </script>
 
 <template>
-    <Flame class="size-5 fill-current text-white dark:text-black"></Flame>
+    <Leaf class="size-5  text-green-200 dark:text-green-900"></Leaf>
 </template>

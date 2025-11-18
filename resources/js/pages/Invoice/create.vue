@@ -310,7 +310,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <Button type="submit" variant="secondary" class="ml-2 md:ml-0 text-lg w-1/3 md:w-1/2"
                   :disabled="form.processing">
                   <LoaderCircle v-if="form.processing" class="h-5 w-5 animate-spin mr-2" />
-                  <Save v-else />
+                  <Save class="size-6" v-else />
                   <span class="hidden md:block">{{ isEdit ? 'Enregistrer' : 'Créer facture' }}</span>
                 </Button>
               </div>
