@@ -88,9 +88,12 @@ withDefaults(
                     </div>
 
                     <div class="lg:col-span-6 mt-16 lg:mt-0 relative">
-                        <div
-                            class="bg-gray-800 h-96 w-full rounded-2xl border-4 border-gray-700 flex items-center justify-center shadow-2xl shadow-black/50 overflow-hidden">
-                            <span class="text-gray-500 text-xl font-medium">Capture d'écran de l'interface</span>
+                        <div class="h-96 w-full rounded-2xl border-1 border-white shadow-2xl shadow-black/50 overflow-hidden 
+               bg-size-[auto_560px] bg-center transition duration-500 ease-in-out hover:scale-105"
+                            style="background-image: url('/bg-home.jpeg');">
+
+                            <div class="h-full w-full flex items-center justify-center">
+                            </div>
                         </div>
                     </div>
                 </div>
