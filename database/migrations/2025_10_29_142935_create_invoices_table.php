@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('total')->nullable()->default('0');
+            $table->decimal('total', 10, 2)->default(0);
             $table->string('status')->default('not_paid');
             $table->integer('client_id')->unsigned();
             $table->integer('user_id')->unsigned();
