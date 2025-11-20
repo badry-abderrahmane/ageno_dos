@@ -120,7 +120,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
                 {{ toMoney(+product.price) }}
               </p>
 
-              <Button variant="outline" size="icon" @click="goToEdit(product.id)">
+              <Button variant="outline" size="xl" @click="goToEdit(product.id)">
                 <Pencil class="h-4 w-4" />
               </Button>
               <DeleteConfirm :binded="destroy.form(product.id)" resource="product" :icon="Trash">

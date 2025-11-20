@@ -97,7 +97,7 @@ const isActiveLink = (link: InertiaLink) => {
               <CardDescription>ICE: {{ client.ice }}</CardDescription>
             </CardHeader>
             <CardFooter class="flex justify-end gap-2">
-              <Button variant="outline" size="icon" class="mr-1" @click="router.visit(edit(client.id).url)">
+              <Button variant="outline" size="xl" class="mr-1" @click="router.visit(edit(client.id).url)">
                 <Pencil class="h-4 w-4" />
               </Button>
               <DeleteConfirm :binded="destroy.form(client.id)" resource="client" :icon="Trash">

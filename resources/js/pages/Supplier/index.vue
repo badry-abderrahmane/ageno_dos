@@ -119,7 +119,7 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
             </CardContent>
 
             <CardFooter class="flex justify-end gap-2">
-              <Button variant="outline" size="icon" @click="goToEdit(supplier.id)">
+              <Button variant="outline" size="xl" @click="goToEdit(supplier.id)">
                 <Pencil class="h-4 w-4" />
               </Button>
               <DeleteConfirm :binded="destroy.form(supplier.id)" resource="supplier" :icon="Trash">

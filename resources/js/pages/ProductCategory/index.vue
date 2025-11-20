@@ -106,7 +106,7 @@ const isActiveLink = (link: InertiaLink) => {
             <CardContent>
               <!-- Actions -->
               <div class="flex justify-end space-x-2 pt-2">
-                <Button variant="outline" size="icon" @click="router.visit(edit(category.id).url)">
+                <Button variant="outline" size="xl" @click="router.visit(edit(category.id).url)">
                   <Pencil class="w-4 h-4" />
                 </Button>
 
