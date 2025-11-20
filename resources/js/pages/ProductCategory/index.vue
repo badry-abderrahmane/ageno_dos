@@ -5,7 +5,7 @@ import { ProductCategory, type BreadcrumbItem, type InertiaLink } from '@/types'
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue';
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Tag, Plus, Search, Boxes } from 'lucide-vue-next';
+import { Pencil, Trash, Tag, CirclePlus, Search, Boxes } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // --- SHADCN/VUE IMPORTS ---
@@ -84,8 +84,8 @@ const isActiveLink = (link: InertiaLink) => {
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create().url)">
-          <Plus></Plus>
-          Ajouter
+          <CirclePlus></CirclePlus>
+          AJOUTER
         </Button>
       </div>
 

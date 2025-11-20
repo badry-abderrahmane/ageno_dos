@@ -24,7 +24,7 @@ defineProps<{
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="secondary">
+      <Button variant="secondary" size="xl">
         <template v-if="icon">
           <component :is="icon"></component>
         </template>

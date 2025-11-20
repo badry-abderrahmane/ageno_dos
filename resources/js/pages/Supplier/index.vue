@@ -5,7 +5,7 @@ import { dashboard } from '@/routes';
 import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
-import { Pencil, Trash, Search, Factory, Plus } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Factory, CirclePlus } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import necessary shadcn-vue components
@@ -92,7 +92,8 @@ const goToEdit = (id: number) => router.visit(edit(id).url);
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         <Button class="w-full sm:w-auto sm:max-w-40" @click="goToCreate">
-          <Plus /> Ajouter
+          <CirclePlus></CirclePlus>
+          AJOUTER
         </Button>
       </div>
 

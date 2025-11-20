@@ -6,7 +6,7 @@ import { Head, router } from '@inertiajs/vue3';
 import DeleteConfirm from '@/components/DeleteConfirm.vue'
 import { defineProps, ref, watch } from 'vue';
 // Import new icons and utilities
-import { Pencil, Trash, Search, Download, File, FileText, Plus, Truck } from 'lucide-vue-next';
+import { Pencil, Trash, Search, Download, File, FileText, Truck, CirclePlus } from 'lucide-vue-next';
 import { debounce } from 'lodash';
 
 // Import Card components from shadcn-vue
@@ -88,8 +88,8 @@ const isActiveLink = (link: InertiaLink) => {
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         <Button class="w-full sm:w-auto sm:max-w-40" @click="router.visit(create())">
-          <Plus></Plus>
-          Ajouter
+          <CirclePlus></CirclePlus>
+          AJOUTER
         </Button>
       </div>
 
@@ -99,7 +99,8 @@ const isActiveLink = (link: InertiaLink) => {
         <!-- Grid layout for cards -->
         <div v-if="invoices.data.length > 0"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          <Card v-for="invoice in invoices.data" :key="invoice.id" class="flex flex-col justify-between">
+          <Card v-for="(invoice, index) in invoices.data" :key="invoice.id" :class="`delay-${index * 1000}`"
+            class="animate-in fade-in slide-in-from-top-12 duration-500 fill-mode-both flex flex-col justify-between">
             <CardHeader>
               <CardTitle>{{ invoice.client.name }}</CardTitle>
               <CardDescription>
@@ -114,22 +115,22 @@ const isActiveLink = (link: InertiaLink) => {
                 }}</p>
             </CardHeader>
             <CardFooter class="flex justify-end gap-2">
-              <Button variant="outline" size="icon" @click="router.visit(edit(invoice.id).url)">
-                <Pencil class="h-4 w-4" />
+              <Button variant="outline" size="xl" @click="router.visit(edit(invoice.id).url)">
+                <Pencil />
               </Button>
               <a :href="download({ invoice: invoice.id }, { query: { type: 'quote' } }).url">
-                <Button variant="outline" size="icon">
-                  <File class="h-4 w-4" />
+                <Button variant="outline" size="xl">
+                  <File />
                 </Button>
               </a>
               <a :href="download({ invoice: invoice.id }, { query: { type: 'delivery' } }).url">
-                <Button variant="outline" size="icon">
-                  <Truck class="h-4 w-4" />
+                <Button variant="outline" size="xl">
+                  <Truck />
                 </Button>
               </a>
               <a :href="download({ invoice: invoice.id }, { query: { type: 'invoice' } }).url">
-                <Button variant="outline" size="icon">
-                  <Download class="h-4 w-4" />
+                <Button variant="outline" size="xl">
+                  <Download />
                 </Button>
               </a>
               <DeleteConfirm :binded="destroy.form(invoice.id)" resource="invoice" :icon="Trash">

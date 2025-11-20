@@ -4,30 +4,10 @@ import StatCard from '@/components/StatCard.vue';
 import LineChart from '@/components/LineChart.vue';
 import PieChart from '@/components/PieChart.vue';
 import { Briefcase, CircleDollarSign, File } from 'lucide-vue-next';
-import { BreadcrumbItem } from '@/types';
+import { BreadcrumbItem, DashboardData } from '@/types';
 import { dashboard } from '@/routes';
 
-// Define the full structure of the Inertia props
-interface Props {
-    stats: {
-        totalInvoices: number;
-        totalRevenue: string; // Formatted string from Laravel
-        totalRevenueMonth: string;
-        totalRevenueYear: string;
-        totalClients: number;
-        clientsThisMonth: number;
-    };
-    monthlyRevenueData: {
-        categories: string[];
-        series: { name: string; data: number[] }[];
-    };
-    clientsBySectorData: {
-        series: number[];
-        labels: string[];
-    };
-}
-
-const props = defineProps<Props>();
+const props = defineProps<DashboardData>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -42,13 +22,17 @@ const breadcrumbs: BreadcrumbItem[] = [
 
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                <StatCard title="Revenue du mois" :value="`${props.stats.totalRevenueMonth}`"
+                <StatCard class="delay-1000" title="Client(s) ce mois" :stat="stats.clientsThisMonth"
+                    :icon="Briefcase" />
+                <StatCard class="delay-1300" title="Facture(s) ce mois" :stat="stats.invoicesThisMonth" :icon="File" />
+                <StatCard class="delay-1600" title="Revenue du mois" :stat="stats.totalRevenueMonth"
                     :icon="CircleDollarSign" />
-                <StatCard title="Revenue Année" :value="`${props.stats.totalRevenueYear}`" :icon="CircleDollarSign" />
-                <StatCard title="Revenue Historique" :value="`${props.stats.totalRevenue}`" :icon="CircleDollarSign" />
-                <StatCard title="Total Invoices" :value="props.stats.totalInvoices" :icon="File" />
-                <StatCard title="Total Clients" :value="props.stats.totalClients" :icon="Briefcase" />
-                <StatCard title="Clients This Month" :value="props.stats.clientsThisMonth" :icon="Briefcase" />
+                <StatCard class="delay-1900" title="Revenue Année" :stat="stats.totalRevenueYear"
+                    :icon="CircleDollarSign" />
+                <StatCard class="delay-2200" title="Revenue Historique" :stat="stats.totalRevenue"
+                    :icon="CircleDollarSign" />
+                <StatCard class="delay-2500" title="Factures" :stat="stats.totalInvoices" :icon="File" />
+                <StatCard class="delay-2700" title="Clients" :stat="stats.totalClients" :icon="Briefcase" />
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

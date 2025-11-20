@@ -99,3 +99,27 @@ export interface InertiaLink {
     /** A boolean indicating if this link represents the currently active page. */
     active: boolean;
 }
+
+interface StatWithComparison<T> {
+    value: T;
+    comparison: string;
+}
+export interface DashboardData {
+    stats: {
+        totalInvoices: StatWithComparison<number>;
+        invoicesThisMonth: StatWithComparison<number>;
+        totalRevenue: StatWithComparison<string>;
+        totalRevenueMonth: StatWithComparison<string>;
+        totalRevenueYear: StatWithComparison<string>;
+        totalClients: StatWithComparison<number>;
+        clientsThisMonth: StatWithComparison<number>;
+    };
+    monthlyRevenueData: {
+        categories: string[];
+        series: { name: string; data: number[] }[];
+    };
+    clientsBySectorData: {
+        series: number[];
+        labels: string[];
+    };
+}
