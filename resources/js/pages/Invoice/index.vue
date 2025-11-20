@@ -97,8 +97,7 @@ const isActiveLink = (link: InertiaLink) => {
       <div class="relative flex-1 rounded-xl border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
 
         <!-- Grid layout for cards -->
-        <div v-if="invoices.data.length > 0"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div v-if="invoices.data.length > 0" class="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3 gap-4">
           <Card v-for="(invoice, index) in invoices.data" :key="invoice.id" :class="`delay-${index * 1000}`"
             class="animate-in fade-in slide-in-from-top-12 duration-500 fill-mode-both flex flex-col justify-between">
             <CardHeader>
@@ -112,7 +111,7 @@ const isActiveLink = (link: InertiaLink) => {
                 </Badge>
               </CardDescription>
               <p class="text-lg text-gray-600 font-mono font-semibold italic text-right pt-2">{{ toMoney(+invoice.total)
-                }}</p>
+              }}</p>
             </CardHeader>
             <CardFooter class="flex justify-end gap-2">
               <Button variant="outline" size="xl" @click="router.visit(edit(invoice.id).url)">
