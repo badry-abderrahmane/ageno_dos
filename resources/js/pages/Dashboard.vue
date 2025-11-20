@@ -35,7 +35,8 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <StatCard class="delay-2700" title="Clients" :stat="stats.totalClients" :icon="Briefcase" />
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div
+                class="animate-in fade-in slide-in-from-top-12 duration-500 fill-mode-both delay-3300 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class=" p-6 shadow-xl rounded-xl border ">
                     <h3 class="text-xl font-semibold mb-4 ">Revenue par mois</h3>
                     <LineChart :data="props.monthlyRevenueData" />
